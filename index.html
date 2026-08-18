@@ -4,38 +4,596 @@
 
 <head>
 
-<meta charset="UTF-8">
+  <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>イノチチャット</title>
+  <title>イノチチャット</title>
 
-<style>
+  <style>
 
-* {
+    * {
 
-  box-sizing: border-box;
+      box-sizing: border-box;
 
-}
+    }
 
-body {
+    body {
 
-  margin: 0;
+      margin: 0;
 
-  min-height: 100vh;
+      min-height: 100vh;
 
-  font-family:
+      font-family:
 
-    -apple-system,
+        -apple-system,
 
-    BlinkMacSystemFont,
+        BlinkMacSystemFont,
 
-    "Hiragino Kaku Gothic ProN",
+        "Hiragino Kaku Gothic ProN",
 
-    "Yu Gothic",
+        "Yu Gothic",
 
-    sans-serif;
+        sans-serif;
 
-  background: linear-gradient(135deg, #eef0ff, #f8f8ff);
+      background: linear-gradient(135deg, #eef0ff, #f8f8ff);
 
-  color: #333;
+      color: #333;
+
+    }
+
+    .app {
+
+      width: min(900px, 94%);
+
+      margin: 30px auto;
+
+      background: white;
+
+      border-radius: 20px;
+
+      overflow: hidden;
+
+      box-shadow: 0 10px 35px rgba(0, 0, 0, 0.12);
+
+    }
+
+    .header {
+
+      padding: 18px 22px;
+
+      color: white;
+
+      background: linear-gradient(135deg, #6878ff, #9a7cff);
+
+    }
+
+    .title {
+
+      font-size: 22px;
+
+      font-weight: bold;
+
+    }
+
+    .subtitle {
+
+      margin-top: 4px;
+
+      font-size: 12px;
+
+      opacity: 0.85;
+
+    }
+
+    .main {
+
+      display: flex;
+
+      min-height: 560px;
+
+    }
+
+    .character {
+
+      width: 45%;
+
+      display: flex;
+
+      justify-content: center;
+
+      align-items: center;
+
+      background: radial-gradient(circle, #ffffff, #e9eaff);
+
+    }
+
+    .character-body {
+
+      width: 220px;
+
+      height: 320px;
+
+      border-radius: 120px 120px 45px 45px;
+
+      background: linear-gradient(180deg, #dddfff, #b8bdff);
+
+      display: flex;
+
+      flex-direction: column;
+
+      justify-content: center;
+
+      align-items: center;
+
+      box-shadow: 0 15px 35px rgba(70, 70, 150, 0.25);
+
+      animation: floating 3s ease-in-out infinite;
+
+    }
+
+    .face {
+
+      font-size: 58px;
+
+      margin-bottom: 25px;
+
+    }
+
+    .name {
+
+      font-weight: bold;
+
+      letter-spacing: 5px;
+
+      opacity: 0.65;
+
+    }
+
+    @keyframes floating {
+
+      0%, 100% {
+
+        transform: translateY(0);
+
+      }
+
+      50% {
+
+        transform: translateY(-8px);
+
+      }
+
+    }
+
+    .chat {
+
+      width: 55%;
+
+      display: flex;
+
+      flex-direction: column;
+
+    }
+
+    .messages {
+
+      flex: 1;
+
+      padding: 22px;
+
+      overflow-y: auto;
+
+      min-height: 430px;
+
+    }
+
+    .message {
+
+      margin-bottom: 18px;
+
+    }
+
+    .message-name {
+
+      font-size: 12px;
+
+      font-weight: bold;
+
+      margin-bottom: 5px;
+
+      color: #6878ff;
+
+    }
+
+    .bubble {
+
+      display: inline-block;
+
+      max-width: 85%;
+
+      padding: 12px 16px;
+
+      border-radius: 15px;
+
+      background: #eef0ff;
+
+      line-height: 1.6;
+
+    }
+
+    .user {
+
+      text-align: right;
+
+    }
+
+    .user .message-name {
+
+      color: #777;
+
+    }
+
+    .user .bubble {
+
+      color: white;
+
+      background: #6878ff;
+
+      text-align: left;
+
+    }
+
+    .thinking {
+
+      display: none;
+
+      padding: 0 22px 10px;
+
+      color: #888;
+
+      font-size: 12px;
+
+    }
+
+    .input-area {
+
+      display: flex;
+
+      gap: 8px;
+
+      padding: 14px;
+
+      border-top: 1px solid #eee;
+
+    }
+
+    #input {
+
+      flex: 1;
+
+      min-width: 0;
+
+      padding: 12px 14px;
+
+      border: 1px solid #ddd;
+
+      border-radius: 12px;
+
+      outline: none;
+
+      font-size: 14px;
+
+    }
+
+    #input:focus {
+
+      border-color: #6878ff;
+
+    }
+
+    #send {
+
+      padding: 0 20px;
+
+      border: 0;
+
+      border-radius: 12px;
+
+      background: #6878ff;
+
+      color: white;
+
+      font-weight: bold;
+
+      cursor: pointer;
+
+    }
+
+    #send:active {
+
+      transform: translateY(1px);
+
+    }
+
+    @media (max-width: 700px) {
+
+      .main {
+
+        flex-direction: column;
+
+      }
+
+      .character,
+
+      .chat {
+
+        width: 100%;
+
+      }
+
+      .character {
+
+        min-height: 280px;
+
+      }
+
+      .character-body {
+
+        width: 150px;
+
+        height: 210px;
+
+      }
+
+      .face {
+
+        font-size: 42px;
+
+        margin-bottom: 15px;
+
+      }
+
+      .messages {
+
+        min-height: 300px;
+
+      }
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+  <div class="app">
+
+    <div class="header">
+
+      <div class="title">● イノチチャット</div>
+
+      <div class="subtitle">Inochi Chat Prototype</div>
+
+    </div>
+
+    <div class="main">
+
+      <div class="character">
+
+        <div class="character-body">
+
+          <div class="face">◕‿◕</div>
+
+          <div class="name">INOCHI</div>
+
+        </div>
+
+      </div>
+
+      <div class="chat">
+
+        <div id="messages" class="messages">
+
+          <div class="message">
+
+            <div class="message-name">イノチ</div>
+
+            <div class="bubble">
+
+              こんにちは！<br>
+
+              私はイノチだよ。<br>
+
+              今日は何を話そうか？
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <div id="thinking" class="thinking">
+
+          イノチが考えています…
+
+        </div>
+
+        <div class="input-area">
+
+          <input
+
+            id="input"
+
+            type="text"
+
+            placeholder="メッセージを入力…"
+
+            autocomplete="off"
+
+          >
+
+          <button id="send" type="button">
+
+            送信
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+
+    const input = document.getElementById("input");
+
+    const send = document.getElementById("send");
+
+    const messages = document.getElementById("messages");
+
+    const thinking = document.getElementById("thinking");
+
+    function addMessage(text, user) {
+
+      const message = document.createElement("div");
+
+      message.className =
+
+        user ? "message user" : "message";
+
+      const name = document.createElement("div");
+
+      name.className = "message-name";
+
+      name.textContent =
+
+        user ? "あなた" : "イノチ";
+
+      const bubble = document.createElement("div");
+
+      bubble.className = "bubble";
+
+      bubble.textContent = text;
+
+      message.appendChild(name);
+
+      message.appendChild(bubble);
+
+      messages.appendChild(message);
+
+      messages.scrollTop = messages.scrollHeight;
+
+    }
+
+    function getReply(text) {
+
+      if (text.includes("こんにちは")) {
+
+        return "こんにちは！来てくれてうれしいよ。";
+
+      }
+
+      if (text.includes("元気")) {
+
+        return "うん、元気だよ！あなたはどう？";
+
+      }
+
+      if (text.includes("名前")) {
+
+        return "私はイノチ。これからもっといろんなことができるようになるよ。";
+
+      }
+
+      if (text.includes("かわいい")) {
+
+        return "えへへ……ありがとう。ちょっと照れるね。";
+
+      }
+
+      if (text.includes("ありがとう")) {
+
+        return "どういたしまして！いつでも話しかけてね。";
+
+      }
+
+      const replies = [
+
+        "うんうん。それで？もっと聞かせて。",
+
+        "なるほど……面白い話だね。",
+
+        "そうなんだ。ちゃんと聞いてるよ。",
+
+        "それについて、もう少し教えてほしいな。",
+
+        "ふふ、なんだか楽しいね。",
+
+        "わかったよ。次は何を話そうか？"
+
+      ];
+
+      return replies[
+
+        Math.floor(Math.random() * replies.length)
+
+      ];
+
+    }
+
+    function sendMessage() {
+
+      const text = input.value.trim();
+
+      if (!text) {
+
+        return;
+
+      }
+
+      addMessage(text, true);
+
+      input.value = "";
+
+      thinking.style.display = "block";
+
+      send.disabled = true;
+
+      setTimeout(function () {
+
+        thinking.style.display = "none";
+
+        addMessage(getReply(text), false);
+
+        send.disabled = false;
+
+        input.focus();
+
+      }, 700);
+
+    }
+
+    send.addEventListener("click", sendMessage);
+
+    input.addEventListener("keydown", function(event) {
+
+      if (event.key === "Enter") {
+
+        event.preventDefault();
+
+        sendMessage();
+
+      }
+
+    });
+
+  </script>
+
+</body>
+
+</html>
