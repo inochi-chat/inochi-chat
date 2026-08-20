@@ -448,139 +448,225 @@
 
   </div>
 
-  <script>
+<script>
 
-    const input = document.getElementById("input");
+  const input = document.getElementById("input");
 
-    const send = document.getElementById("send");
+  const send = document.getElementById("send");
 
-    const messages = document.getElementById("messages");
+  const messages = document.getElementById("messages");
 
-    const thinking = document.getElementById("thinking");
+  const thinking = document.getElementById("thinking");
 
-    function addMessage(text, user) {
+  // LM Studio
 
-      const message = document.createElement("div");
+  const LM_STUDIO_URL =
 
-      message.className =
+    "http://192.168.1.5:1234/v1/chat/completions";
 
-        user ? "message user" : "message";
+  // 今は仮の人格設定。
 
-      const name = document.createElement("div");
+  // あとでLM Studioに残っているピジョンの設定へ置き換える。
 
-      name.className = "message-name";
+  const SYSTEM_PROMPT = `
 
-      name.textContent =
+あなたはイノチチャットのキャラクター「イノチ」です。
 
-        user ? "あなた" : "イノチ";
+親しみやすく自然に会話してください。
 
-      const bubble = document.createElement("div");
+相手の話をちゃんと聞いて、会話を続けることを大切にしてください。
 
-      bubble.className = "bubble";
+  `;
 
-      bubble.textContent = text;
+  // 会話履歴
 
-      message.appendChild(name);
+  const chatHistory = [
 
-      message.appendChild(bubble);
+    {
 
-      messages.appendChild(message);
+      role: "system",
 
-      messages.scrollTop = messages.scrollHeight;
-
-    }
-
-    function getReply(text) {
-
-      if (text.includes("こんにちは")) {
-
-        return "こんにちは！来てくれてうれしいよ。";
-
-      }
-
-      if (text.includes("元気")) {
-
-        return "うん、元気だよ！あなたはどう？";
-
-      }
-
-      if (text.includes("名前")) {
-
-        return "私はイノチ。これからもっといろんなことができるようになるよ。";
-
-      }
-
-      if (text.includes("かわいい")) {
-
-        return "えへへ……ありがとう。ちょっと照れるね。";
-
-      }
-
-      if (text.includes("ありがとう")) {
-
-        return "どういたしまして！いつでも話しかけてね。";
-
-      }
-
-      const replies = [
-
-        "うんうん。それで？もっと聞かせて。",
-
-        "なるほど……面白い話だね。",
-
-        "そうなんだ。ちゃんと聞いてるよ。",
-
-        "それについて、もう少し教えてほしいな。",
-
-        "ふふ、なんだか楽しいね。",
-
-        "わかったよ。次は何を話そうか？"
-
-      ];
-
-      return replies[
-
-        Math.floor(Math.random() * replies.length)
-
-      ];
+      content: SYSTEM_PROMPT
 
     }
 
-    function sendMessage() {
+  ];
 
-      const text = input.value.trim();
+  function addMessage(text, user) {
 
-      if (!text) {
+    const message = document.createElement("div");
 
-        return;
+    message.className =
+
+      user ? "message user" : "message";
+
+    const name = document.createElement("div");
+
+    name.className = "message-name";
+
+    name.textContent =
+
+      user ? "あなた" : "イノチ";
+
+    const bubble = document.createElement("div");
+
+    bubble.className = "bubble";
+
+    bubble.textContent = text;
+
+    message.appendChild(name);
+
+    message.appendChild(bubble);
+
+    messages.appendChild(message);
+
+    messages.scrollTop = messages.scrollHeight;
+
+  }
+
+  async function getAIReply(text) {
+
+    chatHistory.push({
+
+      role: "user",
+
+      content: text
+
+    });
+
+    const response = await fetch(
+
+      LM_STUDIO_URL,
+
+      {
+
+        method: "POST",
+
+        headers: {
+
+          "Content-Type": "application/json"
+
+        },
+
+        body: JSON.stringify({
+
+          model: "Qwen3 8B",
+
+          messages: chatHistory,
+
+          temperature: 0.7,
+
+          stream: false
+
+        })
 
       }
 
-      addMessage(text, true);
+    );
 
-      input.value = "";
+    if (!response.ok) {
 
-      thinking.style.display = "block";
+      throw new Error(
 
-      send.disabled = true;
+        "LM Studio接続エラー: " +
 
-      setTimeout(function () {
+        response.status
 
-        thinking.style.display = "none";
-
-        addMessage(getReply(text), false);
-
-        send.disabled = false;
-
-        input.focus();
-
-      }, 700);
+      );
 
     }
 
-    send.addEventListener("click", sendMessage);
+    const data = await response.json();
 
-    input.addEventListener("keydown", function(event) {
+    const reply =
+
+      data?.choices?.[0]?.message?.content;
+
+    if (!reply) {
+
+      throw new Error(
+
+        "LM Studioから返答がありませんでした"
+
+      );
+
+    }
+
+    chatHistory.push({
+
+      role: "assistant",
+
+      content: reply
+
+    });
+
+    return reply;
+
+  }
+
+  async function sendMessage() {
+
+    const text = input.value.trim();
+
+    if (!text) {
+
+      return;
+
+    }
+
+    addMessage(text, true);
+
+    input.value = "";
+
+    thinking.style.display = "block";
+
+    send.disabled = true;
+
+    try {
+
+      const reply = await getAIReply(text);
+
+      thinking.style.display = "none";
+
+      addMessage(reply, false);
+
+    } catch (error) {
+
+      console.error(error);
+
+      thinking.style.display = "none";
+
+      addMessage(
+
+        "ごめんね。AIとの接続でエラーが起きたみたい。",
+
+        false
+
+      );
+
+    } finally {
+
+      send.disabled = false;
+
+      input.focus();
+
+    }
+
+  }
+
+  send.addEventListener(
+
+    "click",
+
+    sendMessage
+
+  );
+
+  input.addEventListener(
+
+    "keydown",
+
+    function(event) {
 
       if (event.key === "Enter") {
 
@@ -590,9 +676,11 @@
 
       }
 
-    });
+    }
 
-  </script>
+  );
+
+</script>
 
 </body>
 
