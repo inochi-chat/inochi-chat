@@ -699,17 +699,17 @@
 
     } catch (error) {
 
-      console.error(error);
+  console.error(error);
 
-      thinking.style.display = "none";
+  thinking.style.display = "none";
 
-      addMessage(
+  addMessage(
 
-        "ごめんね。AIとの接続でエラーが起きたみたい。",
+    "接続エラー: " + error.message,
 
-        false
+    false
 
-      );
+  );
 
     } finally {
 
