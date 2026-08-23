@@ -460,9 +460,9 @@
 
   // LM Studio
 
-  const LM_STUDIO_URL =
+  const GEMINI_WORKER_URL =
 
-    "http://192.168.1.5:1234/v1/chat/completions";
+  "https://inochi-gemini.0207yokotayu.workers.dev/";
 
   // 今は仮の人格設定。
 
@@ -593,83 +593,75 @@
 
   async function getAIReply(text) {
 
-    chatHistory.push({
+  chatHistory.push({
 
-      role: "user",
+    role: "user",
 
-      content: text
+    content: text
 
-    });
+  });
 
-    const response = await fetch(
+  const response = await fetch(
 
-      LM_STUDIO_URL,
+    GEMINI_WORKER_URL,
 
-      {
+    {
 
-        method: "POST",
+      method: "POST",
 
-        headers: {
+      headers: {
 
-          "Content-Type": "application/json"
+        "Content-Type": "application/json"
 
-        },
+      },
 
-        body: JSON.stringify({
+      body: JSON.stringify({
 
-          model: "Qwen3 8B",
+        message: text
 
-          messages: chatHistory,
+      })
 
-          temperature: 0.7,
+    }
 
-          stream: false
+  );
 
-        })
+  const data = await response.json();
 
-      }
+  if (!response.ok) {
+
+    throw new Error(
+
+      "Gemini接続エラー: " +
+
+      JSON.stringify(data)
 
     );
 
-    if (!response.ok) {
+  }
 
-      throw new Error(
+  const reply = data?.reply;
 
-        "LM Studio接続エラー: " +
+  if (!reply) {
 
-        response.status
+    throw new Error(
 
-      );
+      "Geminiから返答がありませんでした"
 
-    }
-
-    const data = await response.json();
-
-    const reply =
-
-      data?.choices?.[0]?.message?.content;
-
-    if (!reply) {
-
-      throw new Error(
-
-        "LM Studioから返答がありませんでした"
-
-      );
-
-    }
-
-    chatHistory.push({
-
-      role: "assistant",
-
-      content: reply
-
-    });
-
-    return reply;
+    );
 
   }
+
+  chatHistory.push({
+
+    role: "assistant",
+
+    content: reply
+
+  });
+
+  return reply;
+
+}
 
   async function sendMessage() {
 
