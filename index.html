@@ -615,15 +615,14 @@
 
       },
 
-      body: JSON.stringify({
+  body: JSON.stringify({
+    message: text,
+    systemPrompt: SYSTEM_PROMPT
+　})
 
-        message: text
-
-      })
-
-    }
-
-  );
+}
+    
+);
 
   const data = await response.json();
 
