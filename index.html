@@ -634,27 +634,20 @@
 
   }
 
-  const reply = data?.reply;
+　const reply = data?.reply;
 
-  if (!reply) {
+　if (!reply) {
+   throw new Error(
+     "Geminiから返答がありませんでした"
+   );
+　}
 
-    throw new Error(
+　chatHistory.push({
+   role: "assistant",
+   content: reply
+　});
 
-      "Geminiから返答がありませんでした"
-
-    );
-
-  }
-
-  chatHistory.push({
-
-    role: "assistant",
-
-    content: reply
-
-  });
-
-  return reply;
+　return data;
 
 }
 
@@ -678,11 +671,33 @@
 
     try {
 
-      const reply = await getAIReply(text);
+const data = await getAIReply(text);
 
-      thinking.style.display = "none";
+thinking.style.display = "none";
 
-      addMessage(reply, false);
+addMessage(data.reply, false);
+
+if (data.audio) {
+  const audioBytes = Uint8Array.from(
+    atob(data.audio),
+    c => c.charCodeAt(0)
+  );
+
+  const audioBlob = new Blob(
+    [audioBytes],
+    { type: "audio/mpeg" }
+  );
+
+  const audioUrl = URL.createObjectURL(audioBlob);
+
+  const audio = new Audio(audioUrl);
+
+  audio.play();
+
+  audio.onended = () => {
+    URL.revokeObjectURL(audioUrl);
+  };
+}
 
     } catch (error) {
 
