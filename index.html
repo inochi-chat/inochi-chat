@@ -609,20 +609,16 @@
 
       method: "POST",
 
-      headers: {
-
+            headers: {
         "Content-Type": "application/json"
-
       },
 
-  body: JSON.stringify({
-    message: text,
-    systemPrompt: SYSTEM_PROMPT
-　})
-
-}
-    
-);
+      body: JSON.stringify({
+        message: text,
+        systemPrompt: SYSTEM_PROMPT
+      })
+    }
+  );
 
   const data = await response.json();
 
