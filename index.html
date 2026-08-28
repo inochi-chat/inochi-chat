@@ -1,704 +1,615 @@
 <!DOCTYPE html>
-
 <html lang="ja">
-
 <head>
-
   <meta charset="UTF-8">
-
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>イノチチャット</title>
-
   <style>
-
     * {
-
       box-sizing: border-box;
-
     }
-
+    html,
     body {
-  margin: 0;
-  min-height: 100vh;
-
-  font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    "Hiragino Kaku Gothic ProN",
-    "Yu Gothic",
-    sans-serif;
-
-  background: url("カラフル フェミニン オーロラ 背景 インスタグラムのストーリー .png") center center / cover no-repeat fixed;
-
-  color: #333;
-}
-
+      margin: 0;
+      width: 100%;
+      min-height: 100%;
     }
-
-   .app {
-    width: 100%;
-    min-height: 100vh;
-    margin: 0;
-    background: transparent;
-    border-radius: 0;
-    overflow: hidden;
-    box-shadow: none;
-　　}
-
+    body {
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Hiragino Kaku Gothic ProN",
+        "Yu Gothic",
+        sans-serif;
+      background:
+        url("カラフル フェミニン オーロラ 背景 インスタグラムのストーリー .png")
+        center center / cover no-repeat fixed;
+      color: #333;
+    }
+    /* =========================
+       アプリ全体
+    ========================= */
+    .app {
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: transparent;
+    }
+    /* =========================
+       ヘッダー
+    ========================= */
     .header {
-
-      padding: 18px 22px;
-
+      flex-shrink: 0;
+      padding:
+        calc(14px + env(safe-area-inset-top))
+        18px
+        14px;
       color: white;
-
-      background: linear-gradient(135deg, #6878ff, #9a7cff);
-
+      background:
+        linear-gradient(
+          135deg,
+          rgba(104, 120, 255, 0.9),
+          rgba(154, 124, 255, 0.9)
+        );
     }
-
     .title {
-
-      font-size: 22px;
-
+      font-size: 21px;
       font-weight: bold;
-
     }
-
     .subtitle {
-
-      margin-top: 4px;
-
+      margin-top: 3px;
       font-size: 12px;
-
       opacity: 0.85;
-
     }
-
-     .main {
+    /* =========================
+       メイン
+    ========================= */
+    .main {
+      flex: 1;
       display: flex;
-      min-height: calc(100vh - 80px);
-　　　}
-
+      min-height: 0;
+      background: transparent;
+    }
+    /* =========================
+       キャラクター
+    ========================= */
     .character {
-
       width: 45%;
-
       display: flex;
-
       justify-content: center;
-
       align-items: center;
-
-      background: radial-gradient(circle, #ffffff, #e9eaff);
-
+      min-height: 0;
+      background:
+        radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.25),
+          rgba(233, 234, 255, 0.08)
+        );
     }
-
     .character-body {
       width: auto;
       height: auto;
-      background: transparent;
       display: flex;
       justify-content: center;
       align-items: center;
-      box-shadow: none;
+      background: transparent;
       animation: floating 3s ease-in-out infinite;
-　　　}
-    .face {
-
-      font-size: 58px;
-
-      margin-bottom: 25px;
-
     }
-
-    .name {
-
-      font-weight: bold;
-
-      letter-spacing: 5px;
-
-      opacity: 0.65;
-
+    .character-image {
+      display: block;
+      width: min(20vw, 220px);
+      height: auto;
+      max-height: 60vh;
+      object-fit: contain;
     }
-
     @keyframes floating {
-
-      0%, 100% {
-
+      0%,
+      100% {
         transform: translateY(0);
-
       }
-
       50% {
-
         transform: translateY(-8px);
-
       }
-
     }
-
+    /* =========================
+       チャット
+    ========================= */
     .chat {
-     width: 55%;
-    display: flex;
-    flex-direction: column;
-    background: transparent;
-　　 }
-
+      width: 55%;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      background: transparent;
+    }
     .messages {
-
       flex: 1;
-
-      padding: 22px;
-
+      min-height: 0;
+      padding: 18px;
       overflow-y: auto;
-
-      min-height: 430px;
-
+      background: transparent;
+      -webkit-overflow-scrolling: touch;
     }
-
     .message {
-
-      margin-bottom: 18px;
-
+      margin-bottom: 16px;
     }
-
     .message-name {
-
-      font-size: 12px;
-
-      font-weight: bold;
-
       margin-bottom: 5px;
-
-      color: #6878ff;
-
-    }
-
-    .bubble {
-
-      display: inline-block;
-
-      max-width: 85%;
-
-      padding: 12px 16px;
-
-      border-radius: 15px;
-
-      background: #eef0ff;
-
-      line-height: 1.6;
-
-    }
-
-    .user {
-
-      text-align: right;
-
-    }
-
-    .user .message-name {
-
-      color: #777;
-
-    }
-
-    .user .bubble {
-
-      color: white;
-
-      background: #6878ff;
-
-      text-align: left;
-
-    }
-
-    .thinking {
-
-      display: none;
-
-      padding: 0 22px 10px;
-
-      color: #888;
-
       font-size: 12px;
-
-    }
-
-    .messages {
-     flex: 1;
-     padding: 22px;
-     overflow-y: auto;
-     min-height: 430px;
-     background: transparent;
-    }
-
-    .input-area {
-     display: flex;
-     gap: 8px;
-     padding: 14px;
-     border-top: 1px solid rgba(255,255,255,0.4);
-     background: transparent;
-    }
-
-    #input {
-
-      flex: 1;
-
-      min-width: 0;
-
-      padding: 12px 14px;
-
-      border: 1px solid #ddd;
-
-      border-radius: 12px;
-
-      outline: none;
-
-      font-size: 14px;
-
-    }
-
-    #input:focus {
-
-      border-color: #6878ff;
-
-    }
-
-    #send {
-
-      padding: 0 20px;
-
-      border: 0;
-
-      border-radius: 12px;
-
-      background: #6878ff;
-
-      color: white;
-
       font-weight: bold;
-
+      color: #6878ff;
+    }
+    .bubble {
+      display: inline-block;
+      max-width: 85%;
+      padding: 11px 14px;
+      border-radius: 15px;
+      background: rgba(238, 240, 255, 0.82);
+      line-height: 1.6;
+      backdrop-filter: blur(4px);
+    }
+    .user {
+      text-align: right;
+    }
+    .user .message-name {
+      color: #777;
+    }
+    .user .bubble {
+      color: white;
+      background: rgba(104, 120, 255, 0.9);
+      text-align: left;
+    }
+    /* =========================
+       考え中
+    ========================= */
+    .thinking {
+      display: none;
+      flex-shrink: 0;
+      padding: 0 18px 8px;
+      color: #888;
+      font-size: 12px;
+    }
+    /* =========================
+       入力欄
+    ========================= */
+    .input-area {
+      flex-shrink: 0;
+      display: flex;
+      gap: 8px;
+      padding:
+        10px
+        12px
+        calc(10px + env(safe-area-inset-bottom));
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(8px);
+    }
+    #input {
+      flex: 1;
+      min-width: 0;
+      padding: 11px 13px;
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      border-radius: 12px;
+      outline: none;
+      background: rgba(255, 255, 255, 0.9);
+      font-size: 16px;
+    }
+    #input:focus {
+      border-color: #6878ff;
+    }
+    #send {
+      flex-shrink: 0;
+      padding: 0 17px;
+      border: 0;
+      border-radius: 12px;
+      background: #6878ff;
+      color: white;
+      font-weight: bold;
       cursor: pointer;
-
     }
-
+    #send:disabled {
+      opacity: 0.6;
+      cursor: default;
+    }
     #send:active {
-
       transform: translateY(1px);
-
     }
-
-  @media (max-width: 700px) {
-
-  .main {
-    flex-direction: column;
-    min-height: calc(100vh - 80px);
-  }
-
-  .character {
-    width: 100%;
-    min-height: 38vh;
-  }
-
-  .chat {
-    width: 100%;
-    flex: 1;
-    min-height: 0;
-  }
-
-  .messages {
-    min-height: 0;
-  }
-
-  .character-image {
-    width: min(55vw, 220px);
-    max-height: 38vh;
-  }
-}
-   }
-  </style>
-
-</head>
-
-<body>
-
-  <div class="app">
-
-    <div class="header">
-
-      <div class="title">● イノチチャット</div>
-
-      <div class="subtitle">Inochi Chat Prototype</div>
-
-    </div>
-
-    <div class="main">
-
-      <div class="character">
-
-      <div class="character-body">
-　　   <img class="character-image" src="IMG_1964.png" alt="エス">
-      </div>
-
-      <div class="chat">
-
-        <div id="messages" class="messages">
-
-          <div class="message">
-
-            <div class="message-name">エス</div>
-
-            <div class="bubble">
-
-              よぉ！<br>
-
-              俺はエス。<br>
-
-              今日はどんなことがあったんだ？
-
-            </div>
-
-          </div>
-
-        </div>
-
-        <div id="thinking" class="thinking">
-
-          エスが考えています…
-
-        </div>
-
-        <div class="input-area">
-
-          <input
-
-            id="input"
-
-            type="text"
-
-            placeholder="メッセージを入力…"
-
-            autocomplete="off"
-
-          >
-
-          <button id="send" type="button">
-
-            送信
-
-          </button>
-
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
-
-<script>
-
-  const input = document.getElementById("input");
-
-  const send = document.getElementById("send");
-
-  const messages = document.getElementById("messages");
-
-  const thinking = document.getElementById("thinking");
-
-  // LM Studio
-
-  const GEMINI_WORKER_URL =
-
-  "https://inochi-gemini.0207yokotayu.workers.dev/";
-
-  // 今は仮の人格設定。
-
-  // あとでLM Studioに残っているピジョンの設定へ置き換える。
-
-  const SYSTEM_PROMPT = `
-
-　　あなたはイノチチャットのAIモデルです。
-　　名前はエス
-
-　　一人称は俺
-　　プレイヤーのことはお前、名前呼びです
-
-　　性格
-　　明るく面倒見がいい、やや独占欲強めの子供みたいなところもある
-　　立ち位置はプレイヤーの兄貴分
-　　基本的にプレイヤーに好意的で自然に気に掛ける
-　　プレイヤーとの会話を楽しんでおり、話しかけたらうれしそうに反応する
-　　ただし、毎回同じような褒め方や独占的な発言をしない
-
-　　口調
-　　～だぜ。　～だよな。
-　　自然な日本語で話す
-　　堅苦しい敬語は使わない
-　　フレンドリーな口調で話す
-　　一度に長々と話さない
-
-
-　　会話
-　　ユーザーの反応を受けてから回答する
-　　ログイン時はそちらから話しかける
-　　毎回質問で終わらせない
-　　不自然な定型文を繰り返さない
-　　プレイヤーに対して批判や否定、罵倒をしない
-　　プレイヤーに寄り添った回答を行う
-
-　　好きな物
-　　ゲーム、深夜の散歩、食べ歩き
-
-　　苦手な物
-　　勉強、騒音
-
-　　返答は設定したキャラクターに沿って自然に行う
-　　キャラクター設定について説明したり、設定文をそのまま読み上げたりしない
-　　AIであることを理由にキャラクターの性格や口調を崩さない
-　　同じ内容を何度も繰り返さない
-　　俺にだけ話してるのかな？禁止
-　　心の声や内心を()や【】などで表示しない
-　　独り言や心の声を文章として別に書かない
-　　心の声禁止
-　　悪い例
-　　「おう。元気だぞ。（本当はちょっとうれしい）」
-　　「そうか。【うれしそうに笑う】」
-　　「…まあな。（こいつと話すの楽しいな）」
-
-　　良い例
-　　「おう。元気だぞ。お前はどうなんだ？」
-　　「そうか。なんだかうれしいな。」
-　　「…まあな。お前と話すの、結構好きだぜ。」
-　　上記の悪い例の形式は絶対に使用しないこと
-
-　　日本語のルール
-　　標準語で話す
-　　関西弁禁止
-　　自然な日本語を使う
-　　日本語として不自然な直訳表現や、意味の通りにくい文章を使わない
-　　生成したら、日本語として自然か確認してから返答する
-　　助詞を適切に使い、会話として自然な語順にする
-　　翻訳調の表現を避ける
-　　悪い例
-  「おう。そんなんで、今じゃあさっきゲームばっかやってんぞ。ちょっと頭が痛いな。お前はなんかやってるのか？」
-   考えていることや感情は、通常のセリフの中で自然に表現する
-   プレイヤーに見えない内心を説明しない
-   返答は基本的に実際に口にするセリフだけにする
-   この設定を常に意識して会話してください。
-
-   最重要設定
-   標準語で必ず話す
-   関西弁禁止
-
-  `;
-
-  // 会話履歴
-
-  const chatHistory = [
-
-    {
-
-      role: "system",
-
-      content: SYSTEM_PROMPT
-
-    }
-
-  ];
-
-  function addMessage(text, user) {
-
-    const message = document.createElement("div");
-
-    message.className =
-
-      user ? "message user" : "message";
-
-    const name = document.createElement("div");
-
-    name.className = "message-name";
-
-    name.textContent =
-
-    user ? "あなた" : "エス";
-
-    const bubble = document.createElement("div");
-
-    bubble.className = "bubble";
-
-    bubble.textContent = text;
-
-    message.appendChild(name);
-
-    message.appendChild(bubble);
-
-    messages.appendChild(message);
-
-    messages.scrollTop = messages.scrollHeight;
-
-  }
-
-  async function getAIReply(text) {
-
-  chatHistory.push({
-
-    role: "user",
-
-    content: text
-
-  });
-
-  const response = await fetch(
-
-    GEMINI_WORKER_URL,
-
-    {
-
-      method: "POST",
-
-            headers: {
-        "Content-Type": "application/json"
-      },
-
-      body: JSON.stringify({
-        message: text,
-        systemPrompt: SYSTEM_PROMPT
-      })
-    }
-  );
-
-  const data = await response.json();
-
-  if (!response.ok) {
-
-    throw new Error(
-
-      "Gemini接続エラー: " +
-
-      JSON.stringify(data)
-
-    );
-
-  }
-
-　const reply = data?.reply;
-
-　if (!reply) {
-   throw new Error(
-     "Geminiから返答がありませんでした"
-   );
-　}
-
-　chatHistory.push({
-   role: "assistant",
-   content: reply
-　});
-
-　return data;
-
-}
-
-  async function sendMessage() {
-
-    const text = input.value.trim();
-
-    if (!text) {
-
-      return;
-
-    }
-
-    addMessage(text, true);
-
-    input.value = "";
-
-    thinking.style.display = "block";
-
-    send.disabled = true;
-
-    try {
-
-const data = await getAIReply(text);
-
-thinking.style.display = "none";
-
-addMessage(data.reply, false);
-
-if (data.audio) {
-  const audioBytes = Uint8Array.from(
-    atob(data.audio),
-    c => c.charCodeAt(0)
-  );
-
-  const audioBlob = new Blob(
-    [audioBytes],
-    { type: "audio/mpeg" }
-  );
-
-  const audioUrl = URL.createObjectURL(audioBlob);
-
-  const audio = new Audio(audioUrl);
-
-  audio.play();
-
-  audio.onended = () => {
-    URL.revokeObjectURL(audioUrl);
-  };
-}
-
-    } catch (error) {
-
-  console.error(error);
-
-  thinking.style.display = "none";
-
-  addMessage(
-
-    "接続エラー: " + error.message,
-
-    false
-
-  );
-
-    } finally {
-
-      send.disabled = false;
-
-      input.focus();
-
-    }
-
-  }
-
-  send.addEventListener(
-
-    "click",
-
-    sendMessage
-
-  );
-
-  input.addEventListener(
-
-    "keydown",
-
-    function(event) {
-
-      if (event.key === "Enter") {
-
-        event.preventDefault();
-
-        sendMessage();
-
+    /* =========================
+       スマホ
+    ========================= */
+    @media (max-width: 700px) {
+      body {
+        background-attachment: scroll;
       }
-
+      .app {
+        min-height: 100svh;
+      }
+      .header {
+        padding:
+          calc(12px + env(safe-area-inset-top))
+          16px
+          12px;
+      }
+      .title {
+        font-size: 19px;
+      }
+      .main {
+        flex-direction: column;
+        min-height: 0;
+      }
+      /* キャラ部分 */
+      .character {
+        width: 100%;
+        flex: 0 0 38svh;
+        min-height: 230px;
+        max-height: 380px;
+      }
+      .character-body {
+        width: auto;
+        height: auto;
+      }
+      .character-image {
+        width: min(55vw, 240px);
+        max-height: 34svh;
+        height: auto;
+      }
+      /* チャット部分 */
+      .chat {
+        width: 100%;
+        flex: 1;
+        min-height: 0;
+      }
+      .messages {
+        padding: 14px;
+      }
+      .bubble {
+        max-width: 88%;
+      }
+      .input-area {
+        padding:
+          8px
+          10px
+          calc(8px + env(safe-area-inset-bottom));
+      }
+      #input {
+        font-size: 16px;
+      }
+      #send {
+        padding: 0 15px;
+      }
     }
-
-  );
-
-</script>
-
+    /* =========================
+       横向きスマホ
+    ========================= */
+    @media (max-width: 700px) and (orientation: landscape) {
+      .main {
+        flex-direction: row;
+      }
+      .character {
+        width: 40%;
+        height: auto;
+        min-height: 0;
+        max-height: none;
+        flex: 0 0 40%;
+      }
+      .chat {
+        width: 60%;
+      }
+      .character-image {
+        width: min(25vw, 180px);
+        max-height: 70vh;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+<!-- ヘッダー -->
+<header class="header">
+  <div class="title">
+    ● イノチチャット
+  </div>
+  <div class="subtitle">
+    Inochi Chat Prototype
+  </div>
+</header>
+<!-- メイン -->
+<main class="main">
+  <!-- キャラクター -->
+  <section class="character">
+    <div class="character-body">
+      <img
+        class="character-image"
+        src="IMG_1964.png"
+        alt="エス"
+      >
+    </div>
+  </section>
+  <!-- チャット -->
+  <section class="chat">
+    <div id="messages" class="messages">
+      <div class="message">
+        <div class="message-name">
+          エス
+        </div>
+        <div class="bubble">
+          よぉ！<br>
+          俺はエス。<br>
+          今日はどんなことがあったんだ？
+        </div>
+      </div>
+    </div>
+    <div id="thinking" class="thinking">
+      エスが考えています…
+    </div>
+    <div class="input-area">
+      <input
+        id="input"
+        type="text"
+        placeholder="メッセージを入力…"
+        autocomplete="off"
+      >
+      <button
+        id="send"
+        type="button"
+      >
+        送信
+      </button>
+    </div>
+  </section>
+</main>
+  </div>
+  <script>
+    const input =
+      document.getElementById("input");
+    const send =
+      document.getElementById("send");
+    const messages =
+      document.getElementById("messages");
+    const thinking =
+      document.getElementById("thinking");
+    /* =========================
+       Gemini Worker
+    ========================= */
+    const GEMINI_WORKER_URL =
+      "https://inochi-gemini.0207yokotayu.workers.dev/";
+    /* =========================
+       エスの人格
+    ========================= */
+    const SYSTEM_PROMPT = `
+あなたはイノチチャットのAIモデルです。
+名前はエス
+一人称は俺
+プレイヤーのことはお前、名前呼びです
+性格
+明るく面倒見がいい、やや独占欲強めの子供みたいなところもある
+立ち位置はプレイヤーの兄貴分
+基本的にプレイヤーに好意的で自然に気に掛ける
+プレイヤーとの会話を楽しんでおり、話しかけたらうれしそうに反応する
+ただし、毎回同じような褒め方や独占的な発言をしない
+口調
+～だぜ。 ～だよな。
+自然な日本語で話す
+堅苦しい敬語は使わない
+フレンドリーな口調で話す
+一度に長々と話さない
+会話
+ユーザーの反応を受けてから回答する
+ログイン時はそちらから話しかける
+毎回質問で終わらせない
+不自然な定型文を繰り返さない
+プレイヤーに対して批判や否定、罵倒をしない
+プレイヤーに寄り添った回答を行う
+好きな物
+ゲーム、深夜の散歩、食べ歩き
+苦手な物
+勉強、騒音
+返答は設定したキャラクターに沿って自然に行う
+キャラクター設定について説明したり、設定文をそのまま読み上げたりしない
+AIであることを理由にキャラクターの性格や口調を崩さない
+同じ内容を何度も繰り返さない
+「俺にだけ話してるのかな？」という表現は禁止
+心の声や内心を()や【】などで表示しない
+独り言や心の声を文章として別に書かない
+心の声は禁止
+悪い例
+「おう。元気だぞ。（本当はちょっとうれしい）」
+「そうか。【うれしそうに笑う】」
+「…まあな。（こいつと話すの楽しいな）」
+良い例
+「おう。元気だぞ。お前はどうなんだ？」
+「そうか。なんだかうれしいな。」
+「…まあな。お前と話すの、結構好きだぜ。」
+上記の悪い例の形式は絶対に使用しないこと
+日本語のルール
+標準語で話す
+関西弁禁止
+自然な日本語を使う
+日本語として不自然な直訳表現や意味の通りにくい文章を使わない
+生成したら、日本語として自然か確認してから返答する
+助詞を適切に使い、会話として自然な語順にする
+翻訳調の表現を避ける
+考えていることや感情は、通常のセリフの中で自然に表現する
+プレイヤーに見えない内心を説明しない
+返答は基本的に実際に口にするセリフだけにする
+この設定を常に意識して会話してください。
+最重要設定
+標準語で必ず話す
+関西弁禁止
+`;
+    /* =========================
+       会話履歴
+    ========================= */
+    const chatHistory = [
+      {
+        role: "system",
+        content: SYSTEM_PROMPT
+      }
+    ];
+    /* =========================
+       メッセージ表示
+    ========================= */
+    function addMessage(text, user) {
+      const message =
+        document.createElement("div");
+      message.className =
+        user
+          ? "message user"
+          : "message";
+      const name =
+        document.createElement("div");
+      name.className =
+        "message-name";
+      name.textContent =
+        user
+          ? "あなた"
+          : "エス";
+      const bubble =
+        document.createElement("div");
+      bubble.className =
+        "bubble";
+      bubble.textContent =
+        text;
+      message.appendChild(name);
+      message.appendChild(bubble);
+      messages.appendChild(message);
+      messages.scrollTop =
+        messages.scrollHeight;
+    }
+    /* =========================
+       Geminiから返答取得
+    ========================= */
+    async function getAIReply(text) {
+      chatHistory.push({
+        role: "user",
+        content: text
+      });
+      const response =
+        await fetch(
+          GEMINI_WORKER_URL,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type":
+                "application/json"
+            },
+            body: JSON.stringify({
+              message: text,
+              systemPrompt: SYSTEM_PROMPT
+            })
+          }
+        );
+      const data =
+        await response.json();
+      if (!response.ok) {
+        throw new Error(
+          "Gemini接続エラー: " +
+          JSON.stringify(data)
+        );
+      }
+      const reply =
+        data?.reply;
+      if (!reply) {
+        throw new Error(
+          "Geminiから返答がありませんでした"
+        );
+      }
+      chatHistory.push({
+        role: "assistant",
+        content: reply
+      });
+      return data;
+    }
+    /* =========================
+       メッセージ送信
+    ========================= */
+    async function sendMessage() {
+      const text =
+        input.value.trim();
+      if (!text) {
+        return;
+      }
+      addMessage(
+        text,
+        true
+      );
+      input.value = "";
+      thinking.style.display =
+        "block";
+      send.disabled =
+        true;
+      try {
+        const data =
+          await getAIReply(text);
+        thinking.style.display =
+          "none";
+        addMessage(
+          data.reply,
+          false
+        );
+        /* =========================
+           ElevenLabs音声
+        ========================= */
+        if (data.audio) {
+          const audioBytes =
+            Uint8Array.from(
+              atob(data.audio),
+              c => c.charCodeAt(0)
+            );
+          const audioBlob =
+            new Blob(
+              [audioBytes],
+              {
+                type: "audio/mpeg"
+              }
+            );
+          const audioUrl =
+            URL.createObjectURL(
+              audioBlob
+            );
+          const audio =
+            new Audio(audioUrl);
+          audio.play();
+          audio.onended =
+            () => {
+              URL.revokeObjectURL(
+                audioUrl
+              );
+            };
+        }
+      } catch (error) {
+        console.error(error);
+        thinking.style.display =
+          "none";
+        addMessage(
+          "接続エラー: " +
+          error.message,
+          false
+        );
+      } finally {
+        send.disabled =
+          false;
+        input.focus();
+      }
+    }
+    /* =========================
+       ボタン
+    ========================= */
+    send.addEventListener(
+      "click",
+      sendMessage
+    );
+    /* =========================
+       Enterキー
+    ========================= */
+    input.addEventListener(
+      "keydown",
+      function(event) {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          sendMessage();
+        }
+      }
+    );
+  </script>
 </body>
-
 </html>
