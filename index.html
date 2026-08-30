@@ -41,6 +41,9 @@
     ========================= */
     .header {
       flex-shrink: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       padding:
         calc(14px + env(safe-area-inset-top))
         18px
@@ -53,6 +56,9 @@
           rgba(154, 124, 255, 0.9)
         );
     }
+    .header-text {
+      min-width: 0;
+    }
     .title {
       font-size: 21px;
       font-weight: bold;
@@ -61,6 +67,161 @@
       margin-top: 3px;
       font-size: 12px;
       opacity: 0.85;
+    }
+    /* =========================
+       設定ボタン
+    ========================= */
+    .settings-button {
+      flex-shrink: 0;
+      width: 42px;
+      height: 42px;
+      margin-left: 12px;
+      border: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      font-size: 22px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .settings-button:active {
+      transform: scale(0.94);
+    }
+    /* =========================
+       設定オーバーレイ
+    ========================= */
+    .settings-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: rgba(0, 0, 0, 0.25);
+      backdrop-filter: blur(3px);
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .settings-overlay.open {
+      display: flex;
+    }
+    /* =========================
+       設定パネル
+    ========================= */
+    .settings-panel {
+      width: min(100%, 380px);
+      padding: 20px;
+      border-radius: 20px;
+      background:
+        rgba(255, 255, 255, 0.94);
+      box-shadow:
+        0 15px 40px rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(12px);
+    }
+    .settings-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+    }
+    .settings-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #444;
+    }
+    .settings-close {
+      width: 34px;
+      height: 34px;
+      border: 0;
+      border-radius: 50%;
+      background: #eeeef8;
+      color: #555;
+      font-size: 18px;
+      cursor: pointer;
+    }
+    /* =========================
+       設定項目
+    ========================= */
+    .setting-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 15px 4px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    }
+    .setting-item:last-child {
+      border-bottom: 0;
+    }
+    .setting-label {
+      font-size: 15px;
+      font-weight: bold;
+      color: #444;
+    }
+    .setting-description {
+      margin-top: 3px;
+      font-size: 11px;
+      font-weight: normal;
+      color: #888;
+    }
+    /* =========================
+       ON / OFFスイッチ
+    ========================= */
+    .switch {
+      position: relative;
+      flex-shrink: 0;
+      width: 50px;
+      height: 28px;
+    }
+    .switch input {
+      display: none;
+    }
+    .slider {
+      position: absolute;
+      inset: 0;
+      border-radius: 20px;
+      background: #ccc;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .slider::before {
+      content: "";
+      position: absolute;
+      width: 22px;
+      height: 22px;
+      left: 3px;
+      top: 3px;
+      border-radius: 50%;
+      background: white;
+      box-shadow:
+        0 1px 4px rgba(0, 0, 0, 0.2);
+      transition: 0.2s;
+    }
+    .switch input:checked + .slider {
+      background: #6878ff;
+    }
+    .switch input:checked + .slider::before {
+      transform: translateX(22px);
+    }
+    /* =========================
+       リセットボタン
+    ========================= */
+    .reset-button {
+      width: 100%;
+      margin-top: 18px;
+      padding: 12px;
+      border: 0;
+      border-radius: 12px;
+      background: #eeeef8;
+      color: #555;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .reset-button:active {
+      transform: translateY(1px);
     }
     /* =========================
        メイン
@@ -94,7 +255,8 @@
       justify-content: center;
       align-items: center;
       background: transparent;
-      animation: floating 3s ease-in-out infinite;
+      animation:
+        floating 3s ease-in-out infinite;
     }
     .character-image {
       display: block;
@@ -144,7 +306,8 @@
       max-width: 85%;
       padding: 11px 14px;
       border-radius: 15px;
-      background: rgba(238, 240, 255, 0.82);
+      background:
+        rgba(238, 240, 255, 0.82);
       line-height: 1.6;
       backdrop-filter: blur(4px);
     }
@@ -156,7 +319,8 @@
     }
     .user .bubble {
       color: white;
-      background: rgba(104, 120, 255, 0.9);
+      background:
+        rgba(104, 120, 255, 0.9);
       text-align: left;
     }
     /* =========================
@@ -180,17 +344,20 @@
         10px
         12px
         calc(10px + env(safe-area-inset-bottom));
-      background: rgba(255, 255, 255, 0.15);
+      background:
+        rgba(255, 255, 255, 0.15);
       backdrop-filter: blur(8px);
     }
     #input {
       flex: 1;
       min-width: 0;
       padding: 11px 13px;
-      border: 1px solid rgba(255, 255, 255, 0.8);
+      border:
+        1px solid rgba(255, 255, 255, 0.8);
       border-radius: 12px;
       outline: none;
-      background: rgba(255, 255, 255, 0.9);
+      background:
+        rgba(255, 255, 255, 0.9);
       font-size: 16px;
     }
     #input:focus {
@@ -303,16 +470,31 @@
 </head>
 <body>
   <div class="app">
-<!-- ヘッダー -->
+<!-- =========================
+     ヘッダー
+========================= -->
 <header class="header">
-  <div class="title">
-    ● イノチチャット
+  <div class="header-text">
+    <div class="title">
+      ● イノチチャット
+    </div>
+    <div class="subtitle">
+      Inochi Chat Prototype
+    </div>
   </div>
-  <div class="subtitle">
-    Inochi Chat Prototype
-  </div>
+  <!-- 設定ボタン -->
+  <button
+    id="settingsButton"
+    class="settings-button"
+    type="button"
+    aria-label="設定"
+  >
+    ⚙️
+  </button>
 </header>
-<!-- メイン -->
+<!-- =========================
+     メイン
+========================= -->
 <main class="main">
   <!-- キャラクター -->
   <section class="character">
@@ -326,7 +508,10 @@
   </section>
   <!-- チャット -->
   <section class="chat">
-    <div id="messages" class="messages">
+    <div
+      id="messages"
+      class="messages"
+    >
       <div class="message">
         <div class="message-name">
           エス
@@ -338,7 +523,10 @@
         </div>
       </div>
     </div>
-    <div id="thinking" class="thinking">
+    <div
+      id="thinking"
+      class="thinking"
+    >
       エスが考えています…
     </div>
     <div class="input-area">
@@ -358,7 +546,75 @@
   </section>
 </main>
   </div>
+  <!-- =========================
+       設定画面
+  ========================= -->
+  <div
+    id="settingsOverlay"
+    class="settings-overlay"
+  >
+<div
+  class="settings-panel"
+  role="dialog"
+  aria-modal="true"
+  aria-label="設定"
+>
+  <div class="settings-header">
+    <div class="settings-title">
+      ⚙️ 設定
+    </div>
+    <button
+      id="settingsClose"
+      class="settings-close"
+      type="button"
+      aria-label="閉じる"
+    >
+      ×
+    </button>
+  </div>
+  <!-- 音声設定 -->
+  <div class="setting-item">
+    <div>
+      <div class="setting-label">
+        🔊 音声
+      </div>
+      <div class="setting-description">
+        Esの音声を再生します
+      </div>
+    </div>
+    <label class="switch">
+      <input
+        id="voiceToggle"
+        type="checkbox"
+        checked
+      >
+      <span class="slider"></span>
+    </label>
+  </div>
+  <!-- 会話リセット -->
+  <div class="setting-item">
+    <div>
+      <div class="setting-label">
+        🗑️ 会話
+      </div>
+      <div class="setting-description">
+        現在の会話を最初からやり直します
+      </div>
+    </div>
+  </div>
+  <button
+    id="resetButton"
+    class="reset-button"
+    type="button"
+  >
+    会話をリセット
+  </button>
+</div>
+  </div>
   <script>
+    /* =========================
+       DOM
+    ========================= */
     const input =
       document.getElementById("input");
     const send =
@@ -367,6 +623,19 @@
       document.getElementById("messages");
     const thinking =
       document.getElementById("thinking");
+    /* =========================
+       設定
+    ========================= */
+    const settingsButton =
+      document.getElementById("settingsButton");
+    const settingsOverlay =
+      document.getElementById("settingsOverlay");
+    const settingsClose =
+      document.getElementById("settingsClose");
+    const voiceToggle =
+      document.getElementById("voiceToggle");
+    const resetButton =
+      document.getElementById("resetButton");
     /* =========================
        Gemini Worker
     ========================= */
@@ -520,6 +789,42 @@ AIであることを理由にキャラクターの性格や口調を崩さない
       return data;
     }
     /* =========================
+       音声再生
+    ========================= */
+    function playVoice(base64Audio) {
+      if (!voiceToggle.checked) {
+        return;
+      }
+      if (!base64Audio) {
+        return;
+      }
+      const audioBytes =
+        Uint8Array.from(
+          atob(base64Audio),
+          c => c.charCodeAt(0)
+        );
+      const audioBlob =
+        new Blob(
+          [audioBytes],
+          {
+            type: "audio/mpeg"
+          }
+        );
+      const audioUrl =
+        URL.createObjectURL(
+          audioBlob
+        );
+      const audio =
+        new Audio(audioUrl);
+      audio.play();
+      audio.onended =
+        () => {
+          URL.revokeObjectURL(
+            audioUrl
+          );
+        };
+    }
+    /* =========================
        メッセージ送信
     ========================= */
     async function sendMessage() {
@@ -549,33 +854,7 @@ AIであることを理由にキャラクターの性格や口調を崩さない
         /* =========================
            ElevenLabs音声
         ========================= */
-        if (data.audio) {
-          const audioBytes =
-            Uint8Array.from(
-              atob(data.audio),
-              c => c.charCodeAt(0)
-            );
-          const audioBlob =
-            new Blob(
-              [audioBytes],
-              {
-                type: "audio/mpeg"
-              }
-            );
-          const audioUrl =
-            URL.createObjectURL(
-              audioBlob
-            );
-          const audio =
-            new Audio(audioUrl);
-          audio.play();
-          audio.onended =
-            () => {
-              URL.revokeObjectURL(
-                audioUrl
-              );
-            };
-        }
+        playVoice(data.audio);
       } catch (error) {
         console.error(error);
         thinking.style.display =
@@ -592,6 +871,114 @@ AIであることを理由にキャラクターの性格や口調を崩さない
       }
     }
     /* =========================
+       設定を開く
+    ========================= */
+    settingsButton.addEventListener(
+      "click",
+      function() {
+        settingsOverlay.classList.add(
+          "open"
+        );
+      }
+    );
+    /* =========================
+       設定を閉じる
+    ========================= */
+    settingsClose.addEventListener(
+      "click",
+      function() {
+        settingsOverlay.classList.remove(
+          "open"
+        );
+      }
+    );
+    /* =========================
+       背景をタップして閉じる
+    ========================= */
+    settingsOverlay.addEventListener(
+      "click",
+      function(event) {
+        if (
+          event.target ===
+          settingsOverlay
+        ) {
+          settingsOverlay.classList.remove(
+            "open"
+          );
+        }
+      }
+    );
+    /* =========================
+       ESCで閉じる
+    ========================= */
+    document.addEventListener(
+      "keydown",
+      function(event) {
+        if (event.key === "Escape") {
+          settingsOverlay.classList.remove(
+            "open"
+          );
+        }
+      }
+    );
+    /* =========================
+       会話リセット
+    ========================= */
+    resetButton.addEventListener(
+      "click",
+      function() {
+        const confirmed =
+          confirm(
+            "現在の会話をリセットしますか？"
+          );
+        if (!confirmed) {
+          return;
+        }
+        /* 会話履歴を初期化 */
+        chatHistory.length = 0;
+        chatHistory.push({
+          role: "system",
+          content: SYSTEM_PROMPT
+        });
+        /* 画面を初期状態に戻す */
+        messages.innerHTML = `
+          <div class="message">
+            <div class="message-name">
+              エス
+            </div>
+            <div class="bubble">
+              よぉ！<br>
+              俺はエス。<br>
+              今日はどんなことがあったんだ？
+            </div>
+          </div>
+        `;
+        /* 設定を閉じる */
+        settingsOverlay.classList.remove(
+          "open"
+        );
+        /* 入力欄へ戻す */
+        input.focus();
+      }
+    );
+    /* =========================
+       音声設定
+    ========================= */
+    voiceToggle.addEventListener(
+      "change",
+      function() {
+        if (voiceToggle.checked) {
+          console.log(
+            "音声ON"
+          );
+        } else {
+          console.log(
+            "音声OFF"
+          );
+        }
+      }
+    );
+    /* =========================
        ボタン
     ========================= */
     send.addEventListener(
@@ -604,7 +991,10 @@ AIであることを理由にキャラクターの性格や口調を崩さない
     input.addEventListener(
       "keydown",
       function(event) {
-        if (event.key === "Enter") {
+        if (
+          event.key ===
+          "Enter"
+        ) {
           event.preventDefault();
           sendMessage();
         }
