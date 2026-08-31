@@ -744,86 +744,52 @@ AIであることを理由にキャラクターの性格や口調を崩さない
       messages.scrollTop =
         messages.scrollHeight;
     }
-    /* =========================
-       Geminiから返答取得
-    ========================= */
-    async function getAIReply(text) {
-      chatHistory.push({
-        role: "user",
-        content: text
-      });
-      const response =
-        await fetch(
-          GEMINI_WORKER_URL,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type":
-                "application/json"
-            },
-            body: JSON.stringify({
-              message: text,
-              systemPrompt: SYSTEM_PROMPT
-            })
-          }
-        );
-      const data =
-        await response.json();
-      if (!response.ok) {
-        throw new Error(
-          "Gemini接続エラー: " +
-          JSON.stringify(data)
-        );
+/* =========================
+   Geminiから返答取得
+========================= */
+async function getAIReply(text) {
+  chatHistory.push({
+    role: "user",
+    content: text
+  });
+  const response =
+    await fetch(
+      GEMINI_WORKER_URL,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type":
+            "application/json"
+        },
+        body: JSON.stringify({
+          message: text,
+          systemPrompt: SYSTEM_PROMPT,
+          /* 会話履歴をWorkerへ送る */
+          history: chatHistory
+        })
       }
-      const reply =
-        data?.reply;
-      if (!reply) {
-        throw new Error(
-          "Geminiから返答がありませんでした"
-        );
-      }
-      chatHistory.push({
-        role: "assistant",
-        content: reply
-      });
-      return data;
-    }
-    /* =========================
-       音声再生
-    ========================= */
-    function playVoice(base64Audio) {
-      if (!voiceToggle.checked) {
-        return;
-      }
-      if (!base64Audio) {
-        return;
-      }
-      const audioBytes =
-        Uint8Array.from(
-          atob(base64Audio),
-          c => c.charCodeAt(0)
-        );
-      const audioBlob =
-        new Blob(
-          [audioBytes],
-          {
-            type: "audio/mpeg"
-          }
-        );
-      const audioUrl =
-        URL.createObjectURL(
-          audioBlob
-        );
-      const audio =
-        new Audio(audioUrl);
-      audio.play();
-      audio.onended =
-        () => {
-          URL.revokeObjectURL(
-            audioUrl
-          );
-        };
-    }
+    );
+  const data =
+    await response.json();
+  if (!response.ok) {
+    throw new Error(
+      "Gemini接続エラー: " +
+      JSON.stringify(data)
+    );
+  }
+  const reply =
+    data?.reply;
+  if (!reply) {
+    throw new Error(
+      "Geminiから返答がありませんでした"
+    );
+  }
+  chatHistory.push({
+    role: "assistant",
+    content: reply
+  });
+  return data;
+}
     /* =========================
        メッセージ送信
     ========================= */
