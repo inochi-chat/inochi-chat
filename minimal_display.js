@@ -1,5 +1,5 @@
 console.log("MINIMAL DISPLAY START");
-import * as Inochi2D from '../main';
+import * as Inochi2D from './main.js';
 import * as THREE from 'three';
 
 const scene = new THREE.Scene();
@@ -34,7 +34,7 @@ document.body.appendChild(renderer.domElement);
 async function loadPuppet() {
   try {
     const puppet =
-      await Inochi2D.INP.inImportFromURL('model.inp');
+    await Inochi2D.INP.inImportFromURL('./model.inp');
 
     console.log('MODEL LOADED:', puppet);
 
