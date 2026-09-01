@@ -32,10 +32,8 @@ document.body.appendChild(renderer.domElement);
 
 async function loadPuppet() {
   try {
-    console.log('MODEL LOADING...');
-
     const puppet =
-      await Inochi2D.INP.inImportFromURL('./model.inp');
+      await Inochi2D.INP.inImportFromURL('model.inp');
 
     console.log('MODEL LOADED:', puppet);
 
@@ -46,15 +44,12 @@ async function loadPuppet() {
       renderer
     );
 
-    console.log('PUPPET RENDERED');
-
     animate();
 
   } catch (error) {
     console.error('MODEL LOAD ERROR:', error);
   }
 }
-
 function animate() {
   requestAnimationFrame(animate);
 
