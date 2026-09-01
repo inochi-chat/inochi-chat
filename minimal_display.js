@@ -1,15 +1,15 @@
 console.log("MINIMAL DISPLAY START");
 import * as Inochi2D from './main.js';
 import * as THREE from 'three';
+console.log("IMPORT OK");
+console.log("Inochi2D:", Inochi2D);
+console.log("THREE:", THREE);
 const scene = new THREE.Scene();
-const aspectRatio = window.innerWidth / window.innerHeight;
-const cameraWidth = 3000;
-const cameraHeight = cameraWidth / aspectRatio;
 const camera = new THREE.OrthographicCamera(
-  -cameraWidth / 2,
-  cameraWidth / 2,
-  cameraHeight / 2,
-  -cameraHeight / 2,
+  -1500,
+  1500,
+  1500,
+  -1500,
   0.01,
   10000
 );
@@ -23,7 +23,8 @@ renderer.setSize(
   window.innerHeight
 );
 document.body.appendChild(renderer.domElement);
-console.log("THREE READY");
+renderer.render(scene, camera);
+console.log("THREE CANVAS CREATED");
 async function loadPuppet() {
   console.log("LOADING MODEL...");
   try {
@@ -37,13 +38,9 @@ async function loadPuppet() {
       renderer
     );
     console.log("MODEL RENDERED");
-    animate();
+    renderer.render(scene, camera);
   } catch (error) {
     console.error("MODEL LOAD ERROR:", error);
   }
-}
-function animate() {
-  requestAnimationFrame(animate);
-  renderer.render(scene, camera);
 }
 loadPuppet();
