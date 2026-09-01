@@ -9,10 +9,10 @@ const cameraWidth = 3000;
 const cameraHeight = cameraWidth / aspectRatio;
 
 const camera = new THREE.OrthographicCamera(
-  cameraWidth / -2,
+  -cameraWidth / 2,
   cameraWidth / 2,
   cameraHeight / 2,
-  cameraHeight / -2,
+  -cameraHeight / 2,
   0.01,
   10000
 );
@@ -32,8 +32,10 @@ document.body.appendChild(renderer.domElement);
 
 async function loadPuppet() {
   try {
+    console.log('MODEL LOADING...');
+
     const puppet =
-      await Inochi2D.INP.inImportFromURL('testplay2.inp');
+      await Inochi2D.INP.inImportFromURL('./model.inp');
 
     console.log('MODEL LOADED:', puppet);
 
@@ -43,6 +45,8 @@ async function loadPuppet() {
       camera,
       renderer
     );
+
+    console.log('PUPPET RENDERED');
 
     animate();
 
@@ -54,10 +58,7 @@ async function loadPuppet() {
 function animate() {
   requestAnimationFrame(animate);
 
-  renderer.render(
-    scene,
-    camera
-  );
+  renderer.render(scene, camera);
 }
 
 loadPuppet();
