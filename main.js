@@ -1,0 +1,54 @@
+import * as Inochi2D from '../main';
+import * as THREE from 'three';
+
+const scene = new THREE.Scene();
+
+const aspectRatio = window.innerWidth / window.innerHeight;
+
+const cameraWidth = 3000;
+const cameraHeight = cameraWidth / aspectRatio;
+
+const camera = new THREE.OrthographicCamera(
+  cameraWidth / -2,
+  cameraWidth / 2,
+  cameraHeight / 2,
+  cameraHeight / -2,
+  0.01,
+  10000
+);
+
+camera.position.set(0, 1, 500);
+
+const renderer = new THREE.WebGLRenderer({
+  antialias: true,
+});
+
+renderer.setSize(
+  window.innerWidth,
+  window.innerHeight
+);
+
+document.body.appendChild(renderer.domElement);
+
+async function loadPuppet() {
+  try {
+    const puppet =
+      await Inochi2D.INP.inImportFromURL('model.inp');
+
+    console.log('MODEL LOADED:', puppet);
+
+    Inochi2D.Renderer.renderPuppet(
+      puppet,
+      scene,
+      camera,
+      renderer
+    );
+
+    console.log('MODEL RENDERED');
+
+  } catch (error) {
+    console.error('MODEL LOAD ERROR:', error);
+  }
+}
+
+loadPuppet();
