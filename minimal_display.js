@@ -1,3 +1,4 @@
+console.log("MINIMAL DISPLAY START");
 import * as Inochi2D from '../main';
 import * as THREE from 'three';
 
