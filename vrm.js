@@ -363,24 +363,15 @@ window.VRMModule = {
 // ========================================
 // 設定画面の既存VRMボタンにつなぐ
 // ========================================
-window.addEventListener(
-  "load",
-  function() {
-    VRMModule.init();
-    const existingVRMButton =
-      document.getElementById(
-        "vrmLoadButton"
-      );
-    if (existingVRMButton) {
-      existingVRMButton.addEventListener(
-        "click",
-        function() {
-          VRMModule.showFileSelector();
-        }
-      );
-    }
+window.addEventListener("load", function() {
+  VRMModule.init();
+  const existingVRMButton =
+    document.getElementById("vrmLoadButton");
+  if (existingVRMButton) {
+    existingVRMButton.addEventListener("click", function() {
+      alert("VRMボタンは反応しています");
+      VRMModule.showFileSelector();
+    });
   }
-);
-console.log(
-  "VRM MODULE READY"
-);
+});
+console.log("VRM MODULE READY");
