@@ -4,6 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>イノチチャット</title>
+  <!-- Three.js / three-vrm -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/",
+      "@pixiv/three-vrm": "https://cdn.jsdelivr.net/npm/@pixiv/three-vrm@3/lib/three-vrm.module.min.js"
+    }
+  }
+  </script>
   <style>
     * {
       box-sizing: border-box;
@@ -22,13 +32,10 @@
         "Yu Gothic",
         sans-serif;
       background:
-        url("カラフル フェミニン オーロラ 背景 インスタグラムのストーリー .png")
+        url("カラフル フェミニン オーロラ 背景 インスタグラムのストーリー .png")
         center center / cover no-repeat fixed;
       color: #333;
     }
-    /* =========================
-       アプリ全体
-    ========================= */
     .app {
       width: 100%;
       min-height: 100vh;
@@ -37,13 +44,14 @@
       background: transparent;
     }
     /* =========================
-       ヘッダー
+       HEADER
     ========================= */
     .header {
       flex-shrink: 0;
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
+      gap: 12px;
       padding:
         calc(14px + env(safe-area-inset-top))
         18px
@@ -52,8 +60,8 @@
       background:
         linear-gradient(
           135deg,
-          rgba(104, 120, 255, 0.9),
-          rgba(154, 124, 255, 0.9)
+          rgba(104,120,255,0.9),
+          rgba(154,124,255,0.9)
         );
     }
     .header-text {
@@ -68,163 +76,23 @@
       font-size: 12px;
       opacity: 0.85;
     }
-    /* =========================
-       設定ボタン
-    ========================= */
     .settings-button {
       flex-shrink: 0;
       width: 42px;
       height: 42px;
-      margin-left: 12px;
       border: 0;
       border-radius: 50%;
-      background: rgba(255, 255, 255, 0.2);
+      background: rgba(255,255,255,0.2);
       color: white;
       font-size: 22px;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       -webkit-tap-highlight-color: transparent;
     }
     .settings-button:active {
       transform: scale(0.94);
     }
     /* =========================
-       設定オーバーレイ
-    ========================= */
-    .settings-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      z-index: 1000;
-      background: rgba(0, 0, 0, 0.25);
-      backdrop-filter: blur(3px);
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-    .settings-overlay.open {
-      display: flex;
-    }
-    /* =========================
-       設定パネル
-    ========================= */
-    .settings-panel {
-      width: min(100%, 380px);
-      padding: 20px;
-      border-radius: 20px;
-      background:
-        rgba(255, 255, 255, 0.94);
-      box-shadow:
-        0 15px 40px rgba(0, 0, 0, 0.2);
-      backdrop-filter: blur(12px);
-    }
-    .settings-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 18px;
-    }
-    .settings-title {
-      font-size: 20px;
-      font-weight: bold;
-      color: #444;
-    }
-    .settings-close {
-      width: 34px;
-      height: 34px;
-      border: 0;
-      border-radius: 50%;
-      background: #eeeef8;
-      color: #555;
-      font-size: 18px;
-      cursor: pointer;
-    }
-    /* =========================
-       設定項目
-    ========================= */
-    .setting-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 15px;
-      padding: 15px 4px;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-    }
-    .setting-item:last-child {
-      border-bottom: 0;
-    }
-    .setting-label {
-      font-size: 15px;
-      font-weight: bold;
-      color: #444;
-    }
-    .setting-description {
-      margin-top: 3px;
-      font-size: 11px;
-      font-weight: normal;
-      color: #888;
-    }
-    /* =========================
-       ON / OFFスイッチ
-    ========================= */
-    .switch {
-      position: relative;
-      flex-shrink: 0;
-      width: 50px;
-      height: 28px;
-    }
-    .switch input {
-      display: none;
-    }
-    .slider {
-      position: absolute;
-      inset: 0;
-      border-radius: 20px;
-      background: #ccc;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-    .slider::before {
-      content: "";
-      position: absolute;
-      width: 22px;
-      height: 22px;
-      left: 3px;
-      top: 3px;
-      border-radius: 50%;
-      background: white;
-      box-shadow:
-        0 1px 4px rgba(0, 0, 0, 0.2);
-      transition: 0.2s;
-    }
-    .switch input:checked + .slider {
-      background: #6878ff;
-    }
-    .switch input:checked + .slider::before {
-      transform: translateX(22px);
-    }
-    /* =========================
-       リセットボタン
-    ========================= */
-    .reset-button {
-      width: 100%;
-      margin-top: 18px;
-      padding: 12px;
-      border: 0;
-      border-radius: 12px;
-      background: #eeeef8;
-      color: #555;
-      font-size: 14px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .reset-button:active {
-      transform: translateY(1px);
-    }
-    /* =========================
-       メイン
+       MAIN
     ========================= */
     .main {
       flex: 1;
@@ -233,7 +101,7 @@
       background: transparent;
     }
     /* =========================
-       キャラクター
+       CHARACTER
     ========================= */
     .character {
       width: 45%;
@@ -244,13 +112,14 @@
       background:
         radial-gradient(
           circle,
-          rgba(255, 255, 255, 0.25),
-          rgba(233, 234, 255, 0.08)
+          rgba(255,255,255,0.25),
+          rgba(233,234,255,0.08)
         );
+      overflow: hidden;
     }
     .character-body {
-      width: auto;
-      height: auto;
+      width: 100%;
+      height: 100%;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -258,13 +127,27 @@
       animation:
         floating 3s ease-in-out infinite;
     }
-     #app {
-　　　  display: block;
-　　　  width: min(20vw, 220px);
-       height: min(60vh, 500px);
-　　　  max-width: 100%;
-　　　  max-height: 100%;
-　　　}
+    /* PNG */
+    .character-image {
+      display: block;
+      width: min(20vw,220px);
+      height: auto;
+      max-height: 60vh;
+      object-fit: contain;
+    }
+    /* VRM */
+    #vrmCanvas {
+      display: none;
+      width: 100%;
+      height: 100%;
+      touch-action: none;
+    }
+    .character.vrm-mode #characterImage {
+      display: none;
+    }
+    .character.vrm-mode #vrmCanvas {
+      display: block;
+    }
     @keyframes floating {
       0%,
       100% {
@@ -275,7 +158,7 @@
       }
     }
     /* =========================
-       チャット
+       CHAT
     ========================= */
     .chat {
       width: 55%;
@@ -307,7 +190,7 @@
       padding: 11px 14px;
       border-radius: 15px;
       background:
-        rgba(238, 240, 255, 0.82);
+        rgba(238,240,255,0.82);
       line-height: 1.6;
       backdrop-filter: blur(4px);
     }
@@ -320,12 +203,9 @@
     .user .bubble {
       color: white;
       background:
-        rgba(104, 120, 255, 0.9);
+        rgba(104,120,255,0.9);
       text-align: left;
     }
-    /* =========================
-       考え中
-    ========================= */
     .thinking {
       display: none;
       flex-shrink: 0;
@@ -333,9 +213,6 @@
       color: #888;
       font-size: 12px;
     }
-    /* =========================
-       入力欄
-    ========================= */
     .input-area {
       flex-shrink: 0;
       display: flex;
@@ -345,7 +222,7 @@
         12px
         calc(10px + env(safe-area-inset-bottom));
       background:
-        rgba(255, 255, 255, 0.15);
+        rgba(255,255,255,0.15);
       backdrop-filter: blur(8px);
     }
     #input {
@@ -353,11 +230,11 @@
       min-width: 0;
       padding: 11px 13px;
       border:
-        1px solid rgba(255, 255, 255, 0.8);
+        1px solid rgba(255,255,255,0.8);
       border-radius: 12px;
       outline: none;
       background:
-        rgba(255, 255, 255, 0.9);
+        rgba(255,255,255,0.9);
       font-size: 16px;
     }
     #input:focus {
@@ -381,9 +258,154 @@
       transform: translateY(1px);
     }
     /* =========================
-       スマホ
+       SETTINGS OVERLAY
     ========================= */
-    @media (max-width: 700px) {
+    .settings-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background:
+        rgba(0,0,0,0.4);
+      backdrop-filter: blur(5px);
+    }
+    .settings-overlay.open {
+      display: flex;
+    }
+    .settings-panel {
+      width: min(420px, 100%);
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 20px;
+      border-radius: 20px;
+      background:
+        rgba(255,255,255,0.96);
+      box-shadow:
+        0 15px 50px rgba(0,0,0,0.2);
+    }
+    .settings-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+    }
+    .settings-title {
+      font-size: 20px;
+      font-weight: bold;
+    }
+    .settings-close {
+      width: 36px;
+      height: 36px;
+      border: 0;
+      border-radius: 50%;
+      background: #eee;
+      font-size: 20px;
+      cursor: pointer;
+    }
+    .settings-section {
+      margin-bottom: 20px;
+    }
+    .settings-section-title {
+      margin-bottom: 8px;
+      font-size: 13px;
+      font-weight: bold;
+      color: #6878ff;
+    }
+    .settings-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom:
+        1px solid #eee;
+    }
+    .settings-row:last-child {
+      border-bottom: 0;
+    }
+    .settings-label {
+      font-size: 14px;
+    }
+    .settings-description {
+      margin-top: 3px;
+      font-size: 11px;
+      color: #888;
+    }
+    .settings-button-wide {
+      width: 100%;
+      padding: 12px;
+      border: 0;
+      border-radius: 12px;
+      background: #6878ff;
+      color: white;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .settings-button-wide.secondary {
+      margin-top: 8px;
+      background: #eee;
+      color: #555;
+    }
+    .settings-button-wide.danger {
+      background: #ff7185;
+    }
+    #vrmFileInput {
+      display: none;
+    }
+    #vrmStatus {
+      margin-top: 8px;
+      min-height: 18px;
+      font-size: 12px;
+      color: #777;
+      line-height: 1.5;
+    }
+    /* =========================
+       TOGGLE
+    ========================= */
+    .toggle {
+      position: relative;
+      width: 48px;
+      height: 28px;
+      flex-shrink: 0;
+    }
+    .toggle input {
+      display: none;
+    }
+    .toggle-slider {
+      position: absolute;
+      inset: 0;
+      border-radius: 30px;
+      background: #ccc;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .toggle-slider::before {
+      content: "";
+      position: absolute;
+      width: 22px;
+      height: 22px;
+      left: 3px;
+      top: 3px;
+      border-radius: 50%;
+      background: white;
+      box-shadow:
+        0 2px 5px rgba(0,0,0,0.2);
+      transition: 0.2s;
+    }
+    .toggle input:checked + .toggle-slider {
+      background: #6878ff;
+    }
+    .toggle input:checked + .toggle-slider::before {
+      transform: translateX(20px);
+    }
+    /* =========================
+       MOBILE
+    ========================= */
+    @media (max-width:700px) {
       body {
         background-attachment: scroll;
       }
@@ -403,24 +425,22 @@
         flex-direction: column;
         min-height: 0;
       }
-      /* キャラ部分 */
       .character {
         width: 100%;
-        flex: 0 0 38svh;
+        flex:
+          0 0 38svh;
         min-height: 230px;
         max-height: 380px;
       }
       .character-body {
-        width: auto;
+        width: 100%;
+        height: 100%;
+      }
+      .character-image {
+        width: min(55vw,240px);
+        max-height: 34svh;
         height: auto;
       }
-      #app {
-　　　　  width: min(55vw, 240px);
-　　　　  height: 34svh;
-        max-width: 100%;
-　　　　  max-height: 100%;
-　　　　}
-      /* チャット部分 */
       .chat {
         width: 100%;
         flex: 1;
@@ -445,10 +465,7 @@
         padding: 0 15px;
       }
     }
-    /* =========================
-       横向きスマホ
-    ========================= */
-    @media (max-width: 700px) and (orientation: landscape) {
+    @media (max-width:700px) and (orientation:landscape) {
       .main {
         flex-direction: row;
       }
@@ -457,161 +474,210 @@
         height: auto;
         min-height: 0;
         max-height: none;
-        flex: 0 0 40%;
+        flex:
+          0 0 40%;
       }
       .chat {
         width: 60%;
       }
-      #app {
-　　　　  width: min(25vw, 180px);
-　　　　  height: 70vh;
-        max-width: 100%;
-        max-height: 100%;
-　　　　}
+      .character-image {
+        width: min(25vw,180px);
+        max-height: 70vh;
+      }
     }
   </style>
 </head>
 <body>
   <div class="app">
-<!-- =========================
-     ヘッダー
-========================= -->
-<header class="header">
-  <div class="header-text">
-    <div class="title">
-      ● イノチチャット
-    </div>
-    <div class="subtitle">
-      Inochi Chat Prototype
-    </div>
-  </div>
-  <!-- 設定ボタン -->
-  <button
-    id="settingsButton"
-    class="settings-button"
-    type="button"
-    aria-label="設定"
-  >
-    ⚙️
-  </button>
-</header>
-<!-- =========================
-     メイン
-========================= -->
-<main class="main">
-  <!-- キャラクター -->
-  <section class="character">
-  <canvas id="app"></canvas>
-　</section>
-  <!-- チャット -->
-  <section class="chat">
-    <div
-      id="messages"
-      class="messages"
-    >
-      <div class="message">
-        <div class="message-name">
-          エス
+    <!-- =========================
+         HEADER
+    ========================= -->
+    <header class="header">
+      <div class="header-text">
+        <div class="title">
+          ● イノチチャット
         </div>
-        <div class="bubble">
-          よぉ！<br>
-          俺はエス。<br>
-          今日はどんなことがあったんだ？
+        <div class="subtitle">
+          Inochi Chat Prototype
         </div>
       </div>
-    </div>
-    <div
-      id="thinking"
-      class="thinking"
-    >
-      エスが考えています…
-    </div>
-    <div class="input-area">
-      <input
-        id="input"
-        type="text"
-        placeholder="メッセージを入力…"
-        autocomplete="off"
-      >
       <button
-        id="send"
+        id="settingsButton"
+        class="settings-button"
         type="button"
+        aria-label="設定"
       >
-        送信
+        ⚙️
       </button>
-    </div>
-  </section>
-</main>
+    </header>
+    <!-- =========================
+         MAIN
+    ========================= -->
+    <main class="main">
+      <!-- CHARACTER -->
+      <section
+        id="characterArea"
+        class="character"
+      >
+        <div class="character-body">
+          <!-- PNG -->
+          <img
+            id="characterImage"
+            class="character-image"
+            src="IMG_1964.png"
+            alt="エス"
+          >
+          <!-- VRM -->
+          <canvas
+            id="vrmCanvas"
+          ></canvas>
+        </div>
+      </section>
+      <!-- CHAT -->
+      <section class="chat">
+        <div
+          id="messages"
+          class="messages"
+        >
+          <div class="message">
+            <div class="message-name">
+              エス
+            </div>
+            <div class="bubble">
+              よぉ！<br>
+              俺はエス。<br>
+              今日はどんなことがあったんだ？
+            </div>
+          </div>
+        </div>
+        <div
+          id="thinking"
+          class="thinking"
+        >
+          エスが考えています…
+        </div>
+        <div class="input-area">
+          <input
+            id="input"
+            type="text"
+            placeholder="メッセージを入力…"
+            autocomplete="off"
+          >
+          <button
+            id="send"
+            type="button"
+          >
+            送信
+          </button>
+        </div>
+      </section>
+    </main>
   </div>
   <!-- =========================
-       設定画面
+       SETTINGS
   ========================= -->
   <div
     id="settingsOverlay"
     class="settings-overlay"
   >
-<div
-  class="settings-panel"
-  role="dialog"
-  aria-modal="true"
-  aria-label="設定"
->
-  <div class="settings-header">
-    <div class="settings-title">
-      ⚙️ 設定
-    </div>
-    <button
-      id="settingsClose"
-      class="settings-close"
-      type="button"
-      aria-label="閉じる"
+    <div
+      id="settingsPanel"
+      class="settings-panel"
     >
-      ×
-    </button>
-  </div>
-  <!-- 音声設定 -->
-  <div class="setting-item">
-    <div>
-      <div class="setting-label">
-        🔊 音声
+      <div class="settings-header">
+        <div class="settings-title">
+          ⚙️ 設定
+        </div>
+        <button
+          id="settingsClose"
+          class="settings-close"
+          type="button"
+        >
+          ×
+        </button>
       </div>
-      <div class="setting-description">
-        Esの音声を再生します
+      <!-- VOICE -->
+      <div class="settings-section">
+        <div class="settings-section-title">
+          音声
+        </div>
+        <div class="settings-row">
+          <div>
+            <div class="settings-label">
+              エスの音声
+            </div>
+            <div class="settings-description">
+              AIの返答を音声で再生します
+            </div>
+          </div>
+          <label class="toggle">
+            <input
+              id="voiceToggle"
+              type="checkbox"
+              checked
+            >
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+      <!-- VRM -->
+      <div class="settings-section">
+        <div class="settings-section-title">
+          キャラクター
+        </div>
+        <button
+          id="vrmLoadButton"
+          class="settings-button-wide"
+          type="button"
+        >
+          🎭 VRMを読み込む
+        </button>
+        <input
+          id="vrmFileInput"
+          type="file"
+          accept=".vrm,model/vrm"
+        >
+        <button
+          id="pngButton"
+          class="settings-button-wide secondary"
+          type="button"
+        >
+          🖼️ PNGに戻す
+        </button>
+        <div
+          id="vrmStatus"
+        ></div>
+      </div>
+      <!-- RESET -->
+      <div class="settings-section">
+        <div class="settings-section-title">
+          会話
+        </div>
+        <button
+          id="resetButton"
+          class="settings-button-wide danger"
+          type="button"
+        >
+          🗑️ 会話をリセット
+        </button>
       </div>
     </div>
-    <label class="switch">
-      <input
-        id="voiceToggle"
-        type="checkbox"
-        checked
-      >
-      <span class="slider"></span>
-    </label>
   </div>
-  <!-- 会話リセット -->
-  <div class="setting-item">
-    <div>
-      <div class="setting-label">
-        🗑️ 会話
-      </div>
-      <div class="setting-description">
-        現在の会話を最初からやり直します
-      </div>
-    </div>
-  </div>
-  <button
-    id="resetButton"
-    class="reset-button"
-    type="button"
-  >
-    会話をリセット
-  </button>
-</div>
-  </div>
-  <script>
-    /* =========================
-       DOM
-    ========================= */
+  <!-- =========================
+       APP SCRIPT
+    ========================= -->
+  <script type="module">
+    import * as THREE from "three";
+    import {
+      GLTFLoader
+    } from "three/addons/loaders/GLTFLoader.js";
+    import {
+      VRMLoaderPlugin,
+      VRMUtils
+    } from "@pixiv/three-vrm";
+    /* =========================================================
+       ELEMENTS
+    ========================================================= */
     const input =
       document.getElementById("input");
     const send =
@@ -620,27 +686,40 @@
       document.getElementById("messages");
     const thinking =
       document.getElementById("thinking");
-    /* =========================
-       設定
-    ========================= */
     const settingsButton =
       document.getElementById("settingsButton");
     const settingsOverlay =
       document.getElementById("settingsOverlay");
+    const settingsPanel =
+      document.getElementById("settingsPanel");
     const settingsClose =
       document.getElementById("settingsClose");
     const voiceToggle =
       document.getElementById("voiceToggle");
     const resetButton =
       document.getElementById("resetButton");
-    /* =========================
-       Gemini Worker
-    ========================= */
+    const characterArea =
+      document.getElementById("characterArea");
+    const characterImage =
+      document.getElementById("characterImage");
+    const vrmCanvas =
+      document.getElementById("vrmCanvas");
+    const vrmLoadButton =
+      document.getElementById("vrmLoadButton");
+    const vrmFileInput =
+      document.getElementById("vrmFileInput");
+    const pngButton =
+      document.getElementById("pngButton");
+    const vrmStatus =
+      document.getElementById("vrmStatus");
+    /* =========================================================
+       GEMINI
+    ========================================================= */
     const GEMINI_WORKER_URL =
       "https://inochi-gemini.0207yokotayu.workers.dev/";
-    /* =========================
-       エスの人格
-    ========================= */
+    /* =========================================================
+       SYSTEM PROMPT
+    ========================================================= */
     const SYSTEM_PROMPT = `
 あなたはイノチチャットのAIモデルです。
 名前はエス
@@ -702,18 +781,18 @@ AIであることを理由にキャラクターの性格や口調を崩さない
 標準語で必ず話す
 関西弁禁止
 `;
-    /* =========================
-       会話履歴
-    ========================= */
+    /* =========================================================
+       CHAT HISTORY
+    ========================================================= */
     const chatHistory = [
       {
         role: "system",
         content: SYSTEM_PROMPT
       }
     ];
-    /* =========================
-       メッセージ表示
-    ========================= */
+    /* =========================================================
+       CHAT FUNCTIONS
+    ========================================================= */
     function addMessage(text, user) {
       const message =
         document.createElement("div");
@@ -741,55 +820,96 @@ AIであることを理由にキャラクターの性格や口調を崩さない
       messages.scrollTop =
         messages.scrollHeight;
     }
-/* =========================
-   Geminiから返答取得
-========================= */
-async function getAIReply(text) {
-  chatHistory.push({
-    role: "user",
-    content: text
-  });
-  const response =
-    await fetch(
-      GEMINI_WORKER_URL,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type":
-            "application/json"
-        },
-        body: JSON.stringify({
-          message: text,
-          systemPrompt: SYSTEM_PROMPT,
-          /* 会話履歴をWorkerへ送る */
-          history: chatHistory
-        })
+    async function getAIReply(text) {
+      chatHistory.push({
+        role: "user",
+        content: text
+      });
+      const response =
+        await fetch(
+          GEMINI_WORKER_URL,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type":
+                "application/json"
+            },
+            body: JSON.stringify({
+              message: text,
+              systemPrompt: SYSTEM_PROMPT
+            })
+          }
+        );
+      const data =
+        await response.json();
+      if (!response.ok) {
+        throw new Error(
+          "Gemini接続エラー: "
+          + JSON.stringify(data)
+        );
       }
-    );
-  const data =
-    await response.json();
-  if (!response.ok) {
-    throw new Error(
-      "Gemini接続エラー: " +
-      JSON.stringify(data)
-    );
-  }
-  const reply =
-    data?.reply;
-  if (!reply) {
-    throw new Error(
-      "Geminiから返答がありませんでした"
-    );
-  }
-  chatHistory.push({
-    role: "assistant",
-    content: reply
-  });
-  return data;
-}
-    /* =========================
-       メッセージ送信
-    ========================= */
+      const reply =
+        data?.reply;
+      if (!reply) {
+        throw new Error(
+          "Geminiから返答がありませんでした"
+        );
+      }
+      chatHistory.push({
+        role: "assistant",
+        content: reply
+      });
+      return data;
+    }
+    /* =========================================================
+       VOICE
+    ========================================================= */
+    function playVoice(base64Audio) {
+      if (!voiceToggle.checked) {
+        return;
+      }
+      if (!base64Audio) {
+        return;
+      }
+      try {
+        const audioBytes =
+          Uint8Array.from(
+            atob(base64Audio),
+            c => c.charCodeAt(0)
+          );
+        const audioBlob =
+          new Blob(
+            [audioBytes],
+            {
+              type: "audio/mpeg"
+            }
+          );
+        const audioUrl =
+          URL.createObjectURL(audioBlob);
+        const audio =
+          new Audio(audioUrl);
+        audio.play()
+          .catch(error => {
+            console.warn(
+              "音声再生できませんでした:",
+              error
+            );
+          });
+        audio.onended = () => {
+          URL.revokeObjectURL(
+            audioUrl
+          );
+        };
+      } catch (error) {
+        console.error(
+          "音声処理エラー:",
+          error
+        );
+      }
+    }
+    /* =========================================================
+       SEND
+    ========================================================= */
     async function sendMessage() {
       const text =
         input.value.trim();
@@ -814,17 +934,16 @@ async function getAIReply(text) {
           data.reply,
           false
         );
-        /* =========================
-           ElevenLabs音声
-        ========================= */
-        playVoice(data.audio);
+        playVoice(
+          data.audio
+        );
       } catch (error) {
         console.error(error);
         thinking.style.display =
           "none";
         addMessage(
-          "接続エラー: " +
-          error.message,
+          "接続エラー: "
+          + error.message,
           false
         );
       } finally {
@@ -833,31 +952,42 @@ async function getAIReply(text) {
         input.focus();
       }
     }
-    /* =========================
-       設定を開く
-    ========================= */
+    send.addEventListener(
+      "click",
+      sendMessage
+    );
+    input.addEventListener(
+      "keydown",
+      function(event) {
+        if (
+          event.key === "Enter"
+        ) {
+          event.preventDefault();
+          sendMessage();
+        }
+      }
+    );
+    /* =========================================================
+       SETTINGS
+    ========================================================= */
+    function openSettings() {
+      settingsOverlay.classList.add(
+        "open"
+      );
+    }
+    function closeSettings() {
+      settingsOverlay.classList.remove(
+        "open"
+      );
+    }
     settingsButton.addEventListener(
       "click",
-      function() {
-        settingsOverlay.classList.add(
-          "open"
-        );
-      }
+      openSettings
     );
-    /* =========================
-       設定を閉じる
-    ========================= */
     settingsClose.addEventListener(
       "click",
-      function() {
-        settingsOverlay.classList.remove(
-          "open"
-        );
-      }
+      closeSettings
     );
-    /* =========================
-       背景をタップして閉じる
-    ========================= */
     settingsOverlay.addEventListener(
       "click",
       function(event) {
@@ -865,45 +995,37 @@ async function getAIReply(text) {
           event.target ===
           settingsOverlay
         ) {
-          settingsOverlay.classList.remove(
-            "open"
-          );
+          closeSettings();
         }
       }
     );
-    /* =========================
-       ESCで閉じる
-    ========================= */
+    settingsPanel.addEventListener(
+      "click",
+      function(event) {
+        event.stopPropagation();
+      }
+    );
     document.addEventListener(
       "keydown",
       function(event) {
-        if (event.key === "Escape") {
-          settingsOverlay.classList.remove(
-            "open"
-          );
+        if (
+          event.key === "Escape"
+        ) {
+          closeSettings();
         }
       }
     );
-    /* =========================
-       会話リセット
-    ========================= */
+    /* =========================================================
+       RESET CHAT
+    ========================================================= */
     resetButton.addEventListener(
       "click",
       function() {
-        const confirmed =
-          confirm(
-            "現在の会話をリセットしますか？"
-          );
-        if (!confirmed) {
-          return;
-        }
-        /* 会話履歴を初期化 */
         chatHistory.length = 0;
         chatHistory.push({
           role: "system",
           content: SYSTEM_PROMPT
         });
-        /* 画面を初期状態に戻す */
         messages.innerHTML = `
           <div class="message">
             <div class="message-name">
@@ -916,56 +1038,360 @@ async function getAIReply(text) {
             </div>
           </div>
         `;
-        /* 設定を閉じる */
-        settingsOverlay.classList.remove(
-          "open"
-        );
-        /* 入力欄へ戻す */
+        closeSettings();
         input.focus();
       }
     );
-    /* =========================
-       音声設定
-    ========================= */
-    voiceToggle.addEventListener(
+    /* =========================================================
+       THREE.JS / VRM
+    ========================================================= */
+    let renderer = null;
+    let scene = null;
+    let camera = null;
+    let vrm = null;
+    let vrmObjectUrl = null;
+    let vrmLoader = null;
+    let clock = null;
+    function initVRMScene() {
+      if (renderer) {
+        return;
+      }
+      /* Scene */
+      scene =
+        new THREE.Scene();
+      /* Camera */
+      camera =
+        new THREE.PerspectiveCamera(
+          30,
+          1,
+          0.1,
+          100
+        );
+      camera.position.set(
+        0,
+        1.35,
+        4.2
+      );
+      /* Renderer */
+      renderer =
+        new THREE.WebGLRenderer({
+          canvas: vrmCanvas,
+          alpha: true,
+          antialias: true,
+          powerPreference: "high-performance"
+        });
+      renderer.setPixelRatio(
+        Math.min(
+          window.devicePixelRatio || 1,
+          2
+        )
+      );
+      renderer.setClearColor(
+        0x000000,
+        0
+      );
+      /* Light */
+      const ambient =
+        new THREE.HemisphereLight(
+          0xffffff,
+          0x888888,
+          2.0
+        );
+      scene.add(
+        ambient
+      );
+      const directional =
+        new THREE.DirectionalLight(
+          0xffffff,
+          2.0
+        );
+      directional.position.set(
+        1,
+        2,
+        3
+      );
+      scene.add(
+        directional
+      );
+      /* Loader */
+      vrmLoader =
+        new GLTFLoader();
+      vrmLoader.register(
+        (parser) => {
+          return new VRMLoaderPlugin(
+            parser
+          );
+        }
+      );
+      clock =
+        new THREE.Clock();
+      resizeVRM();
+      animateVRM();
+    }
+    function resizeVRM() {
+      if (
+        !renderer ||
+        !camera
+      ) {
+        return;
+      }
+      const width =
+        vrmCanvas.clientWidth;
+      const height =
+        vrmCanvas.clientHeight;
+      if (
+        width <= 0 ||
+        height <= 0
+      ) {
+        return;
+      }
+      renderer.setSize(
+        width,
+        height,
+        false
+      );
+      camera.aspect =
+        width / height;
+      camera.updateProjectionMatrix();
+    }
+    function animateVRM() {
+      requestAnimationFrame(
+        animateVRM
+      );
+      if (
+        !renderer ||
+        !scene ||
+        !camera
+      ) {
+        return;
+      }
+      const deltaTime =
+        clock
+          ? clock.getDelta()
+          : 0;
+      if (vrm) {
+        vrm.update(
+          deltaTime
+        );
+      }
+      renderer.render(
+        scene,
+        camera
+      );
+    }
+    window.addEventListener(
+      "resize",
+      resizeVRM
+    );
+    /* =========================================================
+       VRM AUTO FIT
+    ========================================================= */
+    function fitVRM(vrmInstance) {
+      const box =
+        new THREE.Box3()
+          .setFromObject(
+            vrmInstance.scene
+          );
+      const size =
+        box.getSize(
+          new THREE.Vector3()
+        );
+      const center =
+        box.getCenter(
+          new THREE.Vector3()
+        );
+      const height =
+        Math.max(
+          size.y,
+          0.1
+        );
+      /*
+       * モデルの中心をだいたい
+       * キャラクター表示の中央へ
+       */
+      vrmInstance.scene.position.x =
+        -center.x;
+      vrmInstance.scene.position.y =
+        -box.min.y;
+      /*
+       * 身長が違うVRMでも
+       * 画面内に入りやすくする
+       */
+      const targetHeight =
+        2.7;
+      const scale =
+        targetHeight / height;
+      vrmInstance.scene.scale.setScalar(
+        scale
+      );
+      /*
+       * カメラ
+       */
+      camera.position.set(
+        0,
+        targetHeight * 0.52,
+        targetHeight * 1.55
+      );
+      camera.lookAt(
+        0,
+        targetHeight * 0.48,
+        0
+      );
+    }
+    /* =========================================================
+       LOAD VRM
+    ========================================================= */
+    async function loadVRMFile(file) {
+      if (!file) {
+        return;
+      }
+      if (
+        !file.name
+          .toLowerCase()
+          .endsWith(".vrm")
+      ) {
+        vrmStatus.textContent =
+          "VRMファイルを選択してください。";
+        return;
+      }
+      vrmStatus.textContent =
+        "VRMを読み込んでいます…";
+      try {
+        initVRMScene();
+        const arrayBuffer =
+          await file.arrayBuffer();
+        const gltf =
+          await new Promise(
+            (resolve, reject) => {
+              vrmLoader.parse(
+                arrayBuffer,
+                "",
+                resolve,
+                reject
+              );
+            }
+          );
+        const newVrm =
+          gltf.userData.vrm;
+        if (!newVrm) {
+          throw new Error(
+            "VRMとして認識できませんでした。"
+          );
+        }
+        /*
+         * 古いVRMを削除
+         */
+        if (vrm) {
+          scene.remove(
+            vrm.scene
+          );
+          VRMUtils.deepDispose(
+            vrm.scene
+          );
+        }
+        vrm =
+          newVrm;
+        /*
+         * 軽量化
+         */
+        try {
+          VRMUtils.removeUnnecessaryVertices(
+            vrm.scene
+          );
+          VRMUtils.removeUnnecessaryJoints(
+            vrm.scene
+          );
+        } catch (error) {
+          console.warn(
+            "VRM軽量化処理をスキップ:",
+            error
+          );
+        }
+        /*
+         * フラスタムカリング対策
+         */
+        vrm.scene.traverse(
+          object => {
+            object.frustumCulled =
+              false;
+          }
+        );
+        fitVRM(
+          vrm
+        );
+        scene.add(
+          vrm.scene
+        );
+        /*
+         * PNG → VRM
+         */
+        characterArea.classList.add(
+          "vrm-mode"
+        );
+        vrmStatus.textContent =
+          "VRMを読み込みました。";
+        closeSettings();
+        console.log(
+          "VRM loaded:",
+          vrm
+        );
+      } catch (error) {
+        console.error(
+          "VRM読み込みエラー:",
+          error
+        );
+        vrmStatus.textContent =
+          "VRMの読み込みに失敗しました。";
+        /*
+         * エラーでもPNGは残す
+         */
+        characterArea.classList.remove(
+          "vrm-mode"
+        );
+      }
+    }
+    /* =========================================================
+       VRM FILE BUTTON
+    ========================================================= */
+    vrmLoadButton.addEventListener(
+      "click",
+      function() {
+        vrmFileInput.value =
+          "";
+        vrmFileInput.click();
+      }
+    );
+    vrmFileInput.addEventListener(
       "change",
       function() {
-        if (voiceToggle.checked) {
-          console.log(
-            "音声ON"
-          );
-        } else {
-          console.log(
-            "音声OFF"
+        const file =
+          vrmFileInput.files?.[0];
+        if (file) {
+          loadVRMFile(
+            file
           );
         }
       }
     );
-    /* =========================
-       ボタン
-    ========================= */
-    send.addEventListener(
+    /* =========================================================
+       PNG MODE
+    ========================================================= */
+    pngButton.addEventListener(
       "click",
-      sendMessage
-    );
-    /* =========================
-       Enterキー
-    ========================= */
-    input.addEventListener(
-      "keydown",
-      function(event) {
-        if (
-          event.key ===
-          "Enter"
-        ) {
-          event.preventDefault();
-          sendMessage();
-        }
+      function() {
+        characterArea.classList.remove(
+          "vrm-mode"
+        );
+        vrmStatus.textContent =
+          "PNG表示に戻しました。";
       }
+    );
+    /* =========================================================
+       START
+    ========================================================= */
+    console.log(
+      "イノチチャット起動完了"
     );
   </script>
-
-
-  <script type="module" src="./minimal_display.js"></script>
 </body>
 </html>
