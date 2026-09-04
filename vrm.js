@@ -1,44 +1,52 @@
 // ========================================
 // イノチチャット VRM専用モジュール
-// 本体のチャット・設定・音声には触れない
 // ========================================
 console.log("VRM MODULE START");
 window.VRMModule = {
   viewer: null,
   vrm: null,
-  async init(container) {
-    if (!container) {
-      console.warn("VRM: 表示場所がありません");
-      return false;
+  canvas: null,
+  init: function() {
+    console.log("VRM: 表示領域を作成");
+    // すでに作られていたら何もしない
+    if (document.getElementById("vrmCanvas")) {
+      console.log("VRM: canvas already exists");
+      return;
     }
-    console.log("VRM: 初期化開始");
-    // Three.js がまだ読み込まれていない場合
-    if (!window.THREE) {
-      console.warn("VRM: THREE.js がありません");
-      return false;
-    }
-    console.log("VRM: THREE.js OK");
-    // VRMライブラリ確認
-    if (!window.VRM) {
-      console.warn("VRM: VRMライブラリがありません");
-      return false;
-    }
-    console.log("VRM: VRMライブラリ OK");
-    return true;
+    // VRM専用キャンバス
+    const canvas = document.createElement("canvas");
+    canvas.id = "vrmCanvas";
+    // 画面いっぱいに重ねる
+    canvas.style.position = "fixed";
+    canvas.style.left = "0";
+    canvas.style.top = "0";
+    canvas.style.width = "100%";
+    canvas.style.height = "100%";
+    // 既存の画面より下
+    canvas.style.zIndex = "1";
+    // VRMキャンバスが操作を邪魔しないようにする
+    canvas.style.pointerEvents = "none";
+    // 最初は非表示
+    canvas.style.display = "none";
+    document.body.appendChild(canvas);
+    this.canvas = canvas;
+    console.log("VRM: canvas OK");
   },
-  async load(file) {
-    if (!file) {
-      console.warn("VRM: ファイルがありません");
-      return false;
+  show: function() {
+    if (!this.canvas) {
+      this.init();
     }
-    if (!file.name.toLowerCase().endsWith(".vrm")) {
-      console.warn("VRM: .vrm ファイルを選択してください");
-      return false;
-    }
-    console.log("VRM FILE OK:", file.name);
-    // この段階ではファイル確認まで
-    // 実際の3D表示処理は次の段階で追加する
-    return true;
+    this.canvas.style.display = "block";
+    console.log("VRM: SHOW");
+  },
+  hide: function() {
+    if (!this.canvas) return;
+    this.canvas.style.display = "none";
+    console.log("VRM: HIDE");
   }
 };
+// ページ読み込み後にVRMの場所だけ作る
+window.addEventListener("load", function() {
+  VRMModule.init();
+});
 console.log("VRM MODULE READY");
