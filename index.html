@@ -1433,6 +1433,23 @@ AIであることを理由にキャラクターの性格や口調を崩さない
     console.log(
       "イノチチャット起動完了"
     );
+    /* 設定ボタンを最前面にする */
+　　　.settings-button,
+　　　#settingsButton,
+　　　.settings-panel,
+　　　.settings-overlay {
+      position: relative;
+　　　  z-index: 1000;
+　　　　}
+　　　#settingsButton {
+  pointer-events: auto;
+　　　}
+.settings-panel {
+  z-index: 2000;
+}
+.settings-overlay {
+  z-index: 1500;
+}
   </script>
 </body>
 </html>
