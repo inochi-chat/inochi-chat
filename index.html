@@ -1393,6 +1393,51 @@ AIであることを理由にキャラクターの性格や口調を崩さない
           "PNG表示に戻しました。";
       }
     );
+    vrmDeleteButton.addEventListener(
+  "click",
+  function() {
+
+    // VRMがなければ何もしない
+    if (!vrm) {
+      vrmStatus.textContent =
+        "読み込まれているモデルはありません。";
+      return;
+    }
+
+    // VRMをシーンから削除
+    scene.remove(
+      vrm.scene
+    );
+
+    // メモリからも解放
+    try {
+      VRMUtils.deepDispose(
+        vrm.scene
+      );
+    } catch (error) {
+      console.warn(
+        "VRM解放処理:",
+        error
+      );
+    }
+
+    // VRMを消す
+    vrm = null;
+
+    // PNG表示に戻す
+    characterArea.classList.remove(
+      "vrm-mode"
+    );
+
+    vrmStatus.textContent =
+      "モデルを消しました。";
+
+    console.log(
+      "VRM: MODEL DELETED"
+    );
+  }
+);
+    
     /* =========================================================
        START
     ========================================================= */
