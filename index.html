@@ -344,13 +344,6 @@
       font-size: 14px;
       font-weight: bold;
       cursor: pointer;
-      text-decoration: none;
-      display: block;
-      text-align: center;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .settings-button-wide:active {
-      transform: translateY(1px);
     }
     .settings-button-wide.secondary {
       margin-top: 8px;
@@ -360,19 +353,8 @@
     .settings-button-wide.danger {
       background: #ff7185;
     }
-    /*
-     * iPhone対策
-     *
-     * input自体は画面上から隠すが、
-     * labelをタップしてネイティブの
-     * ファイル選択画面を開く。
-     */
     #vrmFileInput {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      opacity: 0;
-      pointer-events: none;
+      display: none;
     }
     #vrmStatus {
       margin-top: 8px;
@@ -643,21 +625,17 @@
         <div class="settings-section-title">
           キャラクター
         </div>
-        <!--
-          iPhone対応：
-          JavaScriptの.click()ではなく
-          label for=input方式にする
-        -->
-        <label
-          for="vrmFileInput"
+        <button
+          id="vrmLoadButton"
           class="settings-button-wide"
+          type="button"
         >
           🎭 VRMを読み込む
-        </label>
+        </button>
         <input
           id="vrmFileInput"
           type="file"
-          accept="*/*"
+          accept=".vrm,model/vrm"
         >
         <button
           id="pngButton"
@@ -687,7 +665,7 @@
   </div>
   <!-- =========================
        APP SCRIPT
-  ========================= -->
+    ========================= -->
   <script type="module">
     import * as THREE from "three";
     import {
@@ -726,6 +704,8 @@
       document.getElementById("characterImage");
     const vrmCanvas =
       document.getElementById("vrmCanvas");
+    const vrmLoadButton =
+      document.getElementById("vrmLoadButton");
     const vrmFileInput =
       document.getElementById("vrmFileInput");
     const pngButton =
@@ -905,9 +885,7 @@ AIであることを理由にキャラクターの性格や口調を崩さない
             }
           );
         const audioUrl =
-          URL.createObjectURL(
-            audioBlob
-          );
+          URL.createObjectURL(audioBlob);
         const audio =
           new Audio(audioUrl);
         audio.play()
@@ -1071,6 +1049,7 @@ AIであることを理由にキャラクターの性格や口調を崩さない
     let scene = null;
     let camera = null;
     let vrm = null;
+    let vrmObjectUrl = null;
     let vrmLoader = null;
     let clock = null;
     function initVRMScene() {
@@ -1099,8 +1078,7 @@ AIであることを理由にキャラクターの性格や口調を崩さない
           canvas: vrmCanvas,
           alpha: true,
           antialias: true,
-          powerPreference:
-            "high-performance"
+          powerPreference: "high-performance"
         });
       renderer.setPixelRatio(
         Math.min(
@@ -1228,7 +1206,7 @@ AIであることを理由にキャラクターの性格や口調を崩さない
           0.1
         );
       /*
-       * モデルの中心を
+       * モデルの中心をだいたい
        * キャラクター表示の中央へ
        */
       vrmInstance.scene.position.x =
@@ -1267,10 +1245,6 @@ AIであることを理由にキャラクターの性格や口調を崩さない
       if (!file) {
         return;
       }
-      /*
-       * accept="*/*"にしたので、
-       * ここでVRMかどうかを確認する
-       */
       if (
         !file.name
           .toLowerCase()
@@ -1278,7 +1252,6 @@ AIであることを理由にキャラクターの性格や口調を崩さない
       ) {
         vrmStatus.textContent =
           "VRMファイルを選択してください。";
-        vrmFileInput.value = "";
         return;
       }
       vrmStatus.textContent =
@@ -1343,24 +1316,6 @@ AIであることを理由にキャラクターの性格や口調を崩さない
               false;
           }
         );
-        /*
-         * VRM0互換対策
-         */
-        if (
-          vrm.meta &&
-          vrm.meta.metaVersion === "0"
-        ) {
-          try {
-            VRMUtils.rotateVRM0(
-              vrm
-            );
-          } catch (error) {
-            console.warn(
-              "VRM0回転補正をスキップ:",
-              error
-            );
-          }
-        }
         fitVRM(
           vrm
         );
@@ -1394,14 +1349,18 @@ AIであることを理由にキャラクターの性格や口調を崩さない
           "vrm-mode"
         );
       }
-      /*
-       * 同じVRMをもう一度選択できるようにする
-       */
-      vrmFileInput.value = "";
     }
     /* =========================================================
-       VRM FILE INPUT
+       VRM FILE BUTTON
     ========================================================= */
+    vrmLoadButton.addEventListener(
+      "click",
+      function() {
+        vrmFileInput.value =
+          "";
+        vrmFileInput.click();
+      }
+    );
     vrmFileInput.addEventListener(
       "change",
       function() {
@@ -1433,28 +1392,6 @@ AIであることを理由にキャラクターの性格や口調を崩さない
     console.log(
       "イノチチャット起動完了"
     );
-    /* 設定ボタンを最前面にする */
-　　　.settings-button,
-　　　#settingsButton,
-　　　.settings-panel,
-　　　.settings-overlay {
-      position: relative;
-　　　  z-index: 1000;
-　　　　}
-　　　#settingsButton {
-  pointer-events: auto;
-　　　}
-.settings-panel {
-  z-index: 2000;
-}
-.settings-overlay {
-  z-index: 1500;
-}
-  #settingsButton {
-  position: fixed !important;
-  z-index: 99999 !important;
-  pointer-events: auto !important;
-}
   </script>
 </body>
 </html>
