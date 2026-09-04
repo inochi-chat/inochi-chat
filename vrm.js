@@ -9,13 +9,6 @@ window.VRMModule = {
   scene: null,
   camera: null,
   vrm: null,
-  const existingVRMButton = document.getElementById("vrmLoadButton");
-
-　if (existingVRMButton) {
-   existingVRMButton.addEventListener("click", function() {
-    VRMModule.showFileSelector();
-  });
-}
   // ----------------------------------------
   // 初期化
   // ----------------------------------------
@@ -30,9 +23,7 @@ window.VRMModule = {
       canvas.style.top = "0";
       canvas.style.width = "100%";
       canvas.style.height = "100%";
-      // 既存UIより下
       canvas.style.zIndex = "1";
-      // UI操作を邪魔しない
       canvas.style.pointerEvents = "none";
       canvas.style.display = "none";
       document.body.appendChild(canvas);
@@ -41,47 +32,13 @@ window.VRMModule = {
       this.canvas =
         document.getElementById("vrmCanvas");
     }
- 
     console.log("VRM: READY");
   },
   // ----------------------------------------
-  // VRMボタン
-  // ----------------------------------------
-  createButton: function() {
-    if (document.getElementById("vrmLoadButtonSafe")) {
-      return;
-    }
-    const button =
-      document.createElement("button");
-    button.id = "vrmLoadButtonSafe";
-    button.textContent = "🎭 VRMを読み込む";
-    button.style.position = "fixed";
-    button.style.right = "16px";
-    button.style.bottom = "16px";
-    button.style.zIndex = "100000";
-    button.style.padding = "10px 14px";
-    button.style.borderRadius = "10px";
-    button.style.border = "none";
-    button.style.background = "#333";
-    button.style.color = "#fff";
-    button.style.fontSize = "14px";
-    button.style.pointerEvents = "auto";
-    button.addEventListener(
-      "click",
-      function() {
-        VRMModule.showFileSelector();
-      }
-    );
-    document.body.appendChild(button);
-    console.log("VRM: BUTTON CREATED");
-  },
-  // ----------------------------------------
-  // ファイル選択欄を表示
-  // input.click() は使わない
+  // ファイル選択欄
   // ----------------------------------------
   showFileSelector: function() {
     console.log("VRM: SHOW FILE SELECTOR");
-    // すでに表示されていたら何もしない
     if (document.getElementById("vrmFileSelector")) {
       return;
     }
@@ -100,7 +57,10 @@ window.VRMModule = {
       "0 4px 20px rgba(0,0,0,0.25)";
     panel.style.width = "calc(100% - 32px)";
     panel.style.maxWidth = "420px";
+    panel.style.boxSizing = "border-box";
+    // ------------------------------------
     // 説明
+    // ------------------------------------
     const text =
       document.createElement("div");
     text.textContent =
@@ -116,38 +76,37 @@ window.VRMModule = {
       document.createElement("input");
     input.id = "vrmFileSelectorInput";
     input.type = "file";
-    // iPhoneでもファイルを絞りすぎない
+    // すべてのファイルを表示
     input.accept = "*/*";
-    input.style.display = "block";
-　　 input.style.width = "100%";
+    // 見えない入力欄
     input.style.position = "absolute";
     input.style.opacity = "0";
     input.style.width = "1px";
     input.style.height = "1px";
-    const fileButton = document.createElement("label");
-fileButton.textContent = "📁 ファイルを選択";
-fileButton.htmlFor = "vrmFileSelectorInput";
-fileButton.style.display = "block";
-fileButton.style.width = "100%";
-fileButton.style.boxSizing = "border-box";
-fileButton.style.padding = "12px";
-fileButton.style.textAlign = "center";
-fileButton.style.background = "#6878ff";
-fileButton.style.color = "#fff";
-fileButton.style.borderRadius = "8px";
-fileButton.style.fontSize = "14px";
-fileButton.style.fontWeight = "bold";
-fileButton.style.cursor = "pointer";
-panel.appendChild(fileButton);
-input.style.height = "44px";
-input.style.background = "#fff";
-input.style.color = "#333";
-input.style.border = "1px solid #ccc";
-input.style.borderRadius = "8px";
-input.style.padding = "8px";
-input.style.fontSize = "14px";
-input.style.colorScheme = "light";
     panel.appendChild(input);
+    // ------------------------------------
+    // ファイル選択ボタン
+    // ------------------------------------
+    const fileButton =
+      document.createElement("label");
+    fileButton.textContent =
+      "📁 ファイルを選択";
+    fileButton.setAttribute(
+      "for",
+      "vrmFileSelectorInput"
+    );
+    fileButton.style.display = "block";
+    fileButton.style.width = "100%";
+    fileButton.style.boxSizing = "border-box";
+    fileButton.style.padding = "13px";
+    fileButton.style.textAlign = "center";
+    fileButton.style.background = "#6878ff";
+    fileButton.style.color = "#ffffff";
+    fileButton.style.borderRadius = "8px";
+    fileButton.style.fontSize = "14px";
+    fileButton.style.fontWeight = "bold";
+    fileButton.style.cursor = "pointer";
+    panel.appendChild(fileButton);
     // ------------------------------------
     // 閉じるボタン
     // ------------------------------------
@@ -402,12 +361,24 @@ input.style.colorScheme = "light";
   }
 };
 // ========================================
-// ページ読み込み後に初期化
+// 設定画面の既存VRMボタンにつなぐ
 // ========================================
 window.addEventListener(
   "load",
   function() {
     VRMModule.init();
+    const existingVRMButton =
+      document.getElementById(
+        "vrmLoadButton"
+      );
+    if (existingVRMButton) {
+      existingVRMButton.addEventListener(
+        "click",
+        function() {
+          VRMModule.showFileSelector();
+        }
+      );
+    }
   }
 );
 console.log(
