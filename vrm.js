@@ -71,7 +71,7 @@ window.VRMModule = {
     console.log("VRM: FILE SELECT");
     const input = document.createElement("input");
     input.type = "file";
-    input.accept = ".vrm,model/vrm,application/octet-stream";
+    input.accept = "*/*";
     input.addEventListener("change", async function() {
       const file = input.files && input.files[0];
       if (!file) {
