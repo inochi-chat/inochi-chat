@@ -645,12 +645,12 @@
           🖼️ PNGに戻す
         </button>
         <button
-         id="vrmDeleteButton"
-         class="settings-button-wide danger"
-         type="button"
-　　　　　>
+          id="vrmDeleteButton"
+          class="settings-button-wide danger"
+          type="button"
+        >
           🗑️ モデルを消す
-　　　　　</button>
+        </button>
         <div
           id="vrmStatus"
         ></div>
@@ -672,7 +672,7 @@
   </div>
   <!-- =========================
        APP SCRIPT
-    ========================= -->
+  ========================= -->
   <script type="module">
     import * as THREE from "three";
     import {
@@ -711,18 +711,16 @@
       document.getElementById("characterImage");
     const vrmCanvas =
       document.getElementById("vrmCanvas");
-    const pngButton =
-      document.getElementById("pngButton");
-　　　const vrmStatus =
-　　  document.getElementById("vrmStatus");
-　　　const vrmDeleteButton =
-     document.getElementById("vrmDeleteButton");
+    const vrmLoadButton =
+      document.getElementById("vrmLoadButton");
     const vrmFileInput =
       document.getElementById("vrmFileInput");
     const pngButton =
       document.getElementById("pngButton");
     const vrmStatus =
       document.getElementById("vrmStatus");
+    const vrmDeleteButton =
+      document.getElementById("vrmDeleteButton");
     /* =========================================================
        GEMINI
     ========================================================= */
@@ -1397,51 +1395,45 @@ AIであることを理由にキャラクターの性格や口調を崩さない
           "PNG表示に戻しました。";
       }
     );
+    /* =========================================================
+       DELETE VRM
+    ========================================================= */
     vrmDeleteButton.addEventListener(
-  "click",
-  function() {
-
-    // VRMがなければ何もしない
-    if (!vrm) {
-      vrmStatus.textContent =
-        "読み込まれているモデルはありません。";
-      return;
-    }
-
-    // VRMをシーンから削除
-    scene.remove(
-      vrm.scene
+      "click",
+      function() {
+        if (!vrm) {
+          vrmStatus.textContent =
+            "読み込まれているモデルはありません。";
+          return;
+        }
+        /* シーンから削除 */
+        scene.remove(
+          vrm.scene
+        );
+        /* メモリから解放 */
+        try {
+          VRMUtils.deepDispose(
+            vrm.scene
+          );
+        } catch (error) {
+          console.warn(
+            "VRM解放処理:",
+            error
+          );
+        }
+        /* VRMを完全に解除 */
+        vrm = null;
+        /* PNG表示へ */
+        characterArea.classList.remove(
+          "vrm-mode"
+        );
+        vrmStatus.textContent =
+          "モデルを消しました。";
+        console.log(
+          "VRM: MODEL DELETED"
+        );
+      }
     );
-
-    // メモリからも解放
-    try {
-      VRMUtils.deepDispose(
-        vrm.scene
-      );
-    } catch (error) {
-      console.warn(
-        "VRM解放処理:",
-        error
-      );
-    }
-
-    // VRMを消す
-    vrm = null;
-
-    // PNG表示に戻す
-    characterArea.classList.remove(
-      "vrm-mode"
-    );
-
-    vrmStatus.textContent =
-      "モデルを消しました。";
-
-    console.log(
-      "VRM: MODEL DELETED"
-    );
-  }
-);
-    
     /* =========================================================
        START
     ========================================================= */
