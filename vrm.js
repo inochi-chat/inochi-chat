@@ -119,7 +119,10 @@ window.VRMModule = {
     // iPhoneでもファイルを絞りすぎない
     input.accept = "*/*";
     input.style.display = "block";
-    input.style.width = "100%";
+　 　input.style.width = "100%";
+　　 input.style.background = "#fff";
+　 　input.style.color = "#333";
+　　 input.style.colorScheme = "light";
     panel.appendChild(input);
     // ------------------------------------
     // 閉じるボタン
