@@ -6,35 +6,46 @@ window.VRMModule = {
   viewer: null,
   vrm: null,
   canvas: null,
-  init: function() {
-    console.log("VRM: 表示領域を作成");
-    // すでに作られていたら何もしない
-    if (document.getElementById("vrmCanvas")) {
-      console.log("VRM: canvas already exists");
-      return;
+  init: async function() {
+    console.log("VRM: INIT");
+    // VRM用キャンバス
+    if (!document.getElementById("vrmCanvas")) {
+      const canvas = document.createElement("canvas");
+      canvas.id = "vrmCanvas";
+      canvas.style.position = "fixed";
+      canvas.style.left = "0";
+      canvas.style.top = "0";
+      canvas.style.width = "100%";
+      canvas.style.height = "100%";
+      canvas.style.zIndex = "1";
+      canvas.style.pointerEvents = "none";
+      canvas.style.display = "none";
+      document.body.appendChild(canvas);
+      this.canvas = canvas;
+    } else {
+      this.canvas = document.getElementById("vrmCanvas");
     }
-    // VRM専用キャンバス
-    const canvas = document.createElement("canvas");
-    canvas.id = "vrmCanvas";
-    // 画面いっぱいに重ねる
-    canvas.style.position = "fixed";
-    canvas.style.left = "0";
-    canvas.style.top = "0";
-    canvas.style.width = "100%";
-    canvas.style.height = "100%";
-    // 既存の画面より下
-    canvas.style.zIndex = "1";
-    // VRMキャンバスが操作を邪魔しないようにする
-    canvas.style.pointerEvents = "none";
-    // 最初は非表示
-    canvas.style.display = "none";
-    document.body.appendChild(canvas);
-    this.canvas = canvas;
-    console.log("VRM: canvas OK");
+    // Three.jsを読み込む
+    if (!window.THREE) {
+      console.log("VRM: THREE.jsを読み込みます");
+      const script = document.createElement("script");
+      script.src =
+        "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js";
+      script.onload = function() {
+        console.log("VRM: THREE.js OK");
+      };
+      script.onerror = function() {
+        console.error("VRM: THREE.js LOAD ERROR");
+      };
+      document.head.appendChild(script);
+    } else {
+      console.log("VRM: THREE.js ALREADY OK");
+    }
   },
   show: function() {
     if (!this.canvas) {
-      this.init();
+      console.warn("VRM: canvasがありません");
+      return;
     }
     this.canvas.style.display = "block";
     console.log("VRM: SHOW");
@@ -45,7 +56,6 @@ window.VRMModule = {
     console.log("VRM: HIDE");
   }
 };
-// ページ読み込み後にVRMの場所だけ作る
 window.addEventListener("load", function() {
   VRMModule.init();
 });
