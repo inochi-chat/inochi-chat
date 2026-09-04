@@ -9,6 +9,13 @@ window.VRMModule = {
   scene: null,
   camera: null,
   vrm: null,
+  const existingVRMButton = document.getElementById("vrmLoadButton");
+
+　if (existingVRMButton) {
+   existingVRMButton.addEventListener("click", function() {
+    VRMModule.showFileSelector();
+  });
+}
   // ----------------------------------------
   // 初期化
   // ----------------------------------------
@@ -34,7 +41,7 @@ window.VRMModule = {
       this.canvas =
         document.getElementById("vrmCanvas");
     }
-    this.createButton();
+ 
     console.log("VRM: READY");
   },
   // ----------------------------------------
