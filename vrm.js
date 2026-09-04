@@ -117,10 +117,16 @@ window.VRMModule = {
     input.id = "vrmFileSelectorInput";
     input.type = "file";
     // iPhoneでもファイルを絞りすぎない
-    input.accept = "*/*";
-    input.style.display = "block";
+    input.accept = "*/*";input.style.display = "block";
 　 　input.style.width = "100%";
+　 　input.style.height = "44px";
 　　 input.style.background = "#fff";
+　　 input.style.color = "#333";
+　　 input.style.border = "1px solid #ccc";
+　　 input.style.borderRadius = "8px";
+　　 input.style.padding = "8px";
+　　 input.style.fontSize = "14px";
+　　 input.style.colorScheme = "light";　　 input.style.background = "#fff";
 　 　input.style.color = "#333";
 　　 input.style.colorScheme = "light";
     panel.appendChild(input);
