@@ -14,7 +14,7 @@ window.VRMModule = {
   // ----------------------------------------
   init: async function() {
     console.log("VRM: INIT");
-    // VRM用キャンバスを作成
+    // VRM用キャンバス
     if (!document.getElementById("vrmCanvas")) {
       const canvas = document.createElement("canvas");
       canvas.id = "vrmCanvas";
@@ -25,26 +25,27 @@ window.VRMModule = {
       canvas.style.height = "100%";
       // 既存UIより下
       canvas.style.zIndex = "1";
-      // UI操作を絶対に邪魔しない
+      // UI操作を邪魔しない
       canvas.style.pointerEvents = "none";
       canvas.style.display = "none";
       document.body.appendChild(canvas);
       this.canvas = canvas;
     } else {
-      this.canvas = document.getElementById("vrmCanvas");
+      this.canvas =
+        document.getElementById("vrmCanvas");
     }
-    // VRM読み込みボタン
     this.createButton();
     console.log("VRM: READY");
   },
   // ----------------------------------------
-  // VRMボタンを作成
+  // VRMボタン
   // ----------------------------------------
   createButton: function() {
     if (document.getElementById("vrmLoadButtonSafe")) {
       return;
     }
-    const button = document.createElement("button");
+    const button =
+      document.createElement("button");
     button.id = "vrmLoadButtonSafe";
     button.textContent = "🎭 VRMを読み込む";
     button.style.position = "fixed";
@@ -58,34 +59,115 @@ window.VRMModule = {
     button.style.color = "#fff";
     button.style.fontSize = "14px";
     button.style.pointerEvents = "auto";
-    button.addEventListener("click", function() {
-      VRMModule.openFile();
-    });
+    button.addEventListener(
+      "click",
+      function() {
+        VRMModule.showFileSelector();
+      }
+    );
     document.body.appendChild(button);
     console.log("VRM: BUTTON CREATED");
   },
   // ----------------------------------------
-  // ファイル選択
+  // ファイル選択欄を表示
+  // input.click() は使わない
   // ----------------------------------------
-  openFile: function() {
-    console.log("VRM: FILE SELECT");
-    const input = document.createElement("input");
+  showFileSelector: function() {
+    console.log("VRM: SHOW FILE SELECTOR");
+    // すでに表示されていたら何もしない
+    if (document.getElementById("vrmFileSelector")) {
+      return;
+    }
+    const panel =
+      document.createElement("div");
+    panel.id = "vrmFileSelector";
+    panel.style.position = "fixed";
+    panel.style.left = "50%";
+    panel.style.bottom = "75px";
+    panel.style.transform = "translateX(-50%)";
+    panel.style.zIndex = "100001";
+    panel.style.background = "#ffffff";
+    panel.style.padding = "16px";
+    panel.style.borderRadius = "12px";
+    panel.style.boxShadow =
+      "0 4px 20px rgba(0,0,0,0.25)";
+    panel.style.width = "calc(100% - 32px)";
+    panel.style.maxWidth = "420px";
+    // 説明
+    const text =
+      document.createElement("div");
+    text.textContent =
+      "VRMファイルを選択してください";
+    text.style.marginBottom = "10px";
+    text.style.fontSize = "14px";
+    text.style.color = "#333";
+    panel.appendChild(text);
+    // ------------------------------------
+    // 普通のファイル入力
+    // ------------------------------------
+    const input =
+      document.createElement("input");
+    input.id = "vrmFileSelectorInput";
     input.type = "file";
+    // iPhoneでもファイルを絞りすぎない
     input.accept = "*/*";
-    input.addEventListener("change", async function() {
-      const file = input.files && input.files[0];
-      if (!file) {
-        console.log("VRM: NO FILE");
-        return;
+    input.style.display = "block";
+    input.style.width = "100%";
+    panel.appendChild(input);
+    // ------------------------------------
+    // 閉じるボタン
+    // ------------------------------------
+    const closeButton =
+      document.createElement("button");
+    closeButton.textContent = "閉じる";
+    closeButton.style.marginTop = "10px";
+    closeButton.style.padding = "8px 12px";
+    closeButton.style.border = "none";
+    closeButton.style.borderRadius = "8px";
+    closeButton.addEventListener(
+      "click",
+      function() {
+        panel.remove();
       }
-      console.log("VRM: FILE =", file.name);
-      if (!file.name.toLowerCase().endsWith(".vrm")) {
-        alert("VRMファイルを選択してください");
-        return;
+    );
+    panel.appendChild(closeButton);
+    document.body.appendChild(panel);
+    // ------------------------------------
+    // ファイルが選択されたら読み込む
+    // ------------------------------------
+    input.addEventListener(
+      "change",
+      async function() {
+        const file =
+          input.files && input.files[0];
+        if (!file) {
+          console.log("VRM: NO FILE");
+          return;
+        }
+        console.log(
+          "VRM: FILE =",
+          file.name
+        );
+        // VRM以外を拒否
+        if (
+          !file.name
+            .toLowerCase()
+            .endsWith(".vrm")
+        ) {
+          alert(
+            "VRMファイルを選択してください"
+          );
+          return;
+        }
+        // 選択欄を閉じる
+        panel.remove();
+        // VRM読み込み
+        await VRMModule.load(file);
       }
-      await VRMModule.load(file);
-    });
-    input.click();
+    );
+    console.log(
+      "VRM: FILE SELECTOR SHOWN"
+    );
   },
   // ----------------------------------------
   // VRM読み込み
@@ -93,33 +175,55 @@ window.VRMModule = {
   load: async function(file) {
     try {
       console.log("VRM: LOAD START");
-      // ライブラリ読み込み
+      // ------------------------------------
+      // Three.js
+      // ------------------------------------
       const THREE =
         await import(
           "https://esm.sh/three@0.160.0"
         );
+      // ------------------------------------
+      // VRM
+      // ------------------------------------
       const VRM =
         await import(
           "https://esm.sh/@pixiv/three-vrm@2.1.0?deps=three@0.160.0"
         );
+      // ------------------------------------
+      // GLTFLoader
+      // ------------------------------------
+      const GLTFLoaderModule =
+        await import(
+          "https://esm.sh/three@0.160.0/examples/jsm/loaders/GLTFLoader.js"
+        );
+      const GLTFLoader =
+        GLTFLoaderModule.GLTFLoader;
       console.log("VRM: THREE OK");
+      console.log("VRM: GLTF LOADER OK");
       console.log("VRM: LIBRARY OK");
       // ------------------------------------
       // Scene
       // ------------------------------------
-      const scene = new THREE.Scene();
-      scene.background = new THREE.Color(0xeeeeee);
+      const scene =
+        new THREE.Scene();
+      scene.background =
+        new THREE.Color(0xeeeeee);
       // ------------------------------------
       // Camera
       // ------------------------------------
       const camera =
         new THREE.PerspectiveCamera(
           30,
-          window.innerWidth / window.innerHeight,
+          window.innerWidth /
+            window.innerHeight,
           0.1,
           100
         );
-      camera.position.set(0, 1.3, 3);
+      camera.position.set(
+        0,
+        1.3,
+        3
+      );
       // ------------------------------------
       // Light
       // ------------------------------------
@@ -128,7 +232,11 @@ window.VRMModule = {
           0xffffff,
           2
         );
-      light.position.set(1, 2, 3);
+      light.position.set(
+        1,
+        2,
+        3
+      );
       scene.add(light);
       const ambient =
         new THREE.AmbientLight(
@@ -146,73 +254,97 @@ window.VRMModule = {
           antialias: true
         });
       renderer.setPixelRatio(
-        Math.min(window.devicePixelRatio, 2)
+        Math.min(
+          window.devicePixelRatio,
+          2
+        )
       );
       renderer.setSize(
         window.innerWidth,
         window.innerHeight
       );
       // ------------------------------------
-      // VRM読み込み
+      // GLTF Loader
       // ------------------------------------
       const loader =
-        new THREE.GLTFLoader();
+        new GLTFLoader();
       loader.register(
         parser =>
           new VRM.VRMLoaderPlugin(parser)
       );
+      // ------------------------------------
+      // ファイル読み込み
+      // ------------------------------------
       const arrayBuffer =
         await file.arrayBuffer();
       const gltf =
-        await new Promise((resolve, reject) => {
-          loader.parse(
-            arrayBuffer,
-            "",
-            resolve,
-            reject
-          );
-        });
+        await new Promise(
+          (resolve, reject) => {
+            loader.parse(
+              arrayBuffer,
+              "",
+              resolve,
+              reject
+            );
+          }
+        );
       const vrm =
         gltf.userData.vrm;
       if (!vrm) {
-        throw new Error("VRMデータが見つかりません");
+        throw new Error(
+          "VRMデータが見つかりません"
+        );
       }
-      console.log("VRM: MODEL OK");
+      console.log(
+        "VRM: MODEL OK"
+      );
       // ------------------------------------
       // 前のVRMを削除
       // ------------------------------------
-      if (this.vrm) {
-        scene.remove(
+      if (this.vrm && this.scene) {
+        this.scene.remove(
           this.vrm.scene
         );
       }
       this.vrm = vrm;
-      scene.add(vrm.scene);
-      // VRM0の場合の向き補正
-      if (VRM.VRMUtils) {
-        if (
-          typeof VRM.VRMUtils.rotateVRM0 ===
+      scene.add(
+        vrm.scene
+      );
+      // ------------------------------------
+      // VRM0向き補正
+      // ------------------------------------
+      if (
+        VRM.VRMUtils &&
+        typeof VRM.VRMUtils.rotateVRM0 ===
           "function"
-        ) {
-          VRM.VRMUtils.rotateVRM0(vrm);
-        }
+      ) {
+        VRM.VRMUtils.rotateVRM0(
+          vrm
+        );
       }
       this.scene = scene;
       this.camera = camera;
       this.renderer = renderer;
+      // ------------------------------------
       // VRM表示
-      this.canvas.style.display = "block";
+      // ------------------------------------
+      this.canvas.style.display =
+        "block";
       // ------------------------------------
       // アニメーション
       // ------------------------------------
       const clock =
         new THREE.Clock();
       const animate = () => {
-        requestAnimationFrame(animate);
+        requestAnimationFrame(
+          animate
+        );
         const delta =
           clock.getDelta();
         if (this.vrm) {
-          this.vrm.update(delta);
+          this.vrm.update(
+            delta
+          );
         }
         renderer.render(
           scene,
@@ -220,7 +352,9 @@ window.VRMModule = {
         );
       };
       animate();
-      console.log("VRM: DISPLAY OK");
+      console.log(
+        "VRM: DISPLAY OK"
+      );
     } catch (error) {
       console.error(
         "VRM LOAD ERROR:",
@@ -242,4 +376,6 @@ window.addEventListener(
     VRMModule.init();
   }
 );
-console.log("VRM MODULE READY");
+console.log(
+  "VRM MODULE READY"
+);
