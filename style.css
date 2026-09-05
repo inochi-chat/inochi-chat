@@ -1,6 +1,9 @@
 .es-reply {
+  position: fixed;
+  left: 50%;
+  bottom: 90px;
+  transform: translateX(-50%);
   width: min(90%, 700px);
-  margin: 10px auto 20px;
   padding: 14px 18px;
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.92);
@@ -9,4 +12,5 @@
   line-height: 1.6;
   text-align: left;
   box-sizing: border-box;
+  z-index: 20;
 }
