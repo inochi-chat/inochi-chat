@@ -541,28 +541,46 @@
 
 <!-- CHAT -->
 <section class="chat">
-        <div
-          id="messages"
-          class="messages"
-        >
-          <div class="message">
-            <div class="message-name">
-              エス
-            </div>
-            <div class="bubble">
-              よぉ！<br>
-              俺はエス。<br>
-              今日はどんなことがあったんだ？
-            </div>
-          </div>
-        </div>
-        <div
-          id="thinking"
-          class="thinking"
-        >
-          エスが考えています…
-        </div>
-        <div class="input-area">
+
+  <!-- 過去の会話 -->
+  <div id="messages" class="messages">
+    <div class="message">
+      <div class="message-name">
+        エス
+      </div>
+      <div class="bubble">
+        よぉ！<br>
+        俺はエス。<br>
+        今日はどんなことがあったんだ？
+      </div>
+    </div>
+  </div>
+
+  <!-- 考え中 -->
+  <div
+    id="thinking"
+    class="thinking"
+  >
+    エスが考えています…
+  </div>
+
+  <!-- 入力 -->
+  <div class="input-area">
+    <input
+      id="input"
+      type="text"
+      placeholder="メッセージを入力…"
+      autocomplete="off"
+    >
+    <button
+      id="send"
+      type="button"
+    >
+      送信
+    </button>
+  </div>
+
+</section>
           <input
             id="input"
             type="text"
