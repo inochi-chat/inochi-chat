@@ -1481,5 +1481,18 @@ AIであることを理由にキャラクターの性格や口調を崩さない
     );
   </script>
  <script src="./es-reply.js"></script>
+  <script>
+  const historyPanel = document.getElementById("historyPanel");
+  const historyOpen = document.getElementById("historyOpen");
+  const historyClose = document.getElementById("historyClose");
+
+  historyOpen.addEventListener("click", () => {
+    historyPanel.classList.add("open");
+  });
+
+  historyClose.addEventListener("click", () => {
+    historyPanel.classList.remove("open");
+  });
+</script>
 </body>
 </html>
