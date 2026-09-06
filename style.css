@@ -79,3 +79,20 @@
 
   cursor: pointer;
 }
+
+.history-item {
+  padding: 10px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.history-item-name {
+  font-size: 12px;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.history-item-text {
+  font-size: 14px;
+  line-height: 1.5;
+  word-break: break-word;
+}
