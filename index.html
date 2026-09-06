@@ -867,6 +867,7 @@ AIであることを理由にキャラクターの性格や口調を崩さない
       messages.appendChild(message);
       messages.scrollTop =
         messages.scrollHeight;
+      addToHistory(text, user);
     }
     async function getAIReply(text) {
       chatHistory.push({
