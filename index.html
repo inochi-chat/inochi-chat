@@ -863,7 +863,7 @@ AIであることを理由にキャラクターの性格や口調を崩さない
       messages.appendChild(message);
       messages.scrollTop =
         messages.scrollHeight;
-      addToHistory(text, user);
+      
     }
     async function getAIReply(text) {
       chatHistory.push({
@@ -903,8 +903,8 @@ AIであることを理由にキャラクターの性格や口調を崩さない
       chatHistory.push({
         role: "assistant",
         content: reply
-      });
-      return data;
+　　　　});
+　　　　return reply;
     }
     /* =========================================================
        VOICE
@@ -972,13 +972,16 @@ AIであることを理由にキャラクターの性格や口調を崩さない
         true;
       try {
         const data =
-          await getAIReply(text);
-        thinking.style.display =
-          "none";
-        addMessage(
-          data.reply,
-          false
-        );
+  await getAIReply(text);
+
+thinking.style.display =
+  "none";
+
+showEsReply(data);
+addMessage(
+  data,
+  false
+);
         playVoice(
           data.audio
         );
