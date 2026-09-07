@@ -1490,24 +1490,7 @@ startEsLoginGreeting();
   });
 </script>
   <script>
-  const historyContent = document.getElementById("historyContent");
-
-  function addToHistory(text, user = false) {
-    const item = document.createElement("div");
-    item.className = "history-item";
-
-    const name = document.createElement("div");
-    name.className = "history-item-name";
-    name.textContent = user ? "あなた" : "エス";
-
-    const body = document.createElement("div");
-    body.className = "history-item-text";
-    body.textContent = text;
-
-    item.appendChild(name);
-    item.appendChild(body);
-    historyContent.appendChild(item);
-  }
+  
 </script>
 </body>
 </html>
