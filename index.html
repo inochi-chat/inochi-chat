@@ -904,7 +904,7 @@ AIであることを理由にキャラクターの性格や口調を崩さない
         role: "assistant",
         content: reply
 　　　　});
-　　　　return reply;
+　　　　return data;
     }
     /* =========================================================
        VOICE
@@ -971,20 +971,22 @@ AIであることを理由にキャラクターの性格や口調を崩さない
       send.disabled =
         true;
       try {
-        const data =
+       const data =
   await getAIReply(text);
 
 thinking.style.display =
   "none";
 
-showEsReply(data);
+showEsReply(data.reply);
+
 addMessage(
-  data,
+  data.reply,
   false
 );
-        playVoice(
-          data.audio
-        );
+
+playVoice(
+  data.audio
+);
       } catch (error) {
         console.error(error);
         thinking.style.display =
