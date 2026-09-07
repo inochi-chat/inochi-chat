@@ -1476,11 +1476,37 @@ playVoice(
       }
     );
     /* =========================================================
-       START
-    ========================================================= */
-    console.log(
-      "イノチチャット起動完了"
+   START
+========================================================= */
+async function startEsLoginGreeting() {
+  try {
+    thinking.style.display =
+      "block";
+    const data =
+      await getAIReply(
+        "ログインしてきたお前に、エスから自然に最初の一言をかけて。短く話しかけて。"
+      );
+    thinking.style.display =
+      "none";
+    showEsReply(
+      data.reply
     );
+    playVoice(
+      data.audio
+    );
+  } catch (error) {
+    console.error(
+      "ログイン挨拶エラー:",
+      error
+    );
+    thinking.style.display =
+      "none";
+  }
+}
+console.log(
+  "イノチチャット起動完了"
+);
+startEsLoginGreeting();
   </script>
  <script src="./es-reply.js"></script>
   <script>
