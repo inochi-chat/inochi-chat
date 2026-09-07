@@ -1056,18 +1056,7 @@ playVoice(
           role: "system",
           content: SYSTEM_PROMPT
         });
-        messages.innerHTML = `
-          <div class="message">
-            <div class="message-name">
-              エス
-            </div>
-            <div class="bubble">
-              よぉ！<br>
-              俺はエス。<br>
-              今日はどんなことがあったんだ？
-            </div>
-          </div>
-        `;
+        messages.innerHTML = "";
         closeSettings();
         input.focus();
       }
