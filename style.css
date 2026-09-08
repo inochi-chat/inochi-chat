@@ -96,3 +96,8 @@
   line-height: 1.5;
   word-break: break-word;
 }
+
+#historyContent .messages {
+  padding: 16px;
+  overflow-y: auto;
+}
