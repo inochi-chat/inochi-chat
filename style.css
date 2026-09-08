@@ -68,7 +68,7 @@
 .history-open {
   position: fixed;
   right: 12px;
-  top: 70%;
+  top: 20%;
   transform: translateY(-50%);
 
   z-index: 900;
