@@ -101,3 +101,11 @@
   padding: 16px;
   overflow-y: auto;
 }
+
+.input-area {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 800;
+}
